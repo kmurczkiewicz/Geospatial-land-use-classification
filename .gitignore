@@ -1,4 +1,10 @@
+# Notebook checkpoints
 .ipynb_checkpoints
-models_ir
-models_pb
-dataset
+
+# Notebook for local testing
+testing_notebook.ipynb
+
+# Artefacts
+artefacts
+
+__pycache__

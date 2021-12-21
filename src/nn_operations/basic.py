@@ -7,10 +7,9 @@ import matplotlib.pyplot
 # Custom Imports
 import src.helpers.print_extensions
 import src.helpers.timer
-import src.data_operations
 
-""" 4. Initialize, train and save model functions"""
 
+""" Initialize, train and save model functions"""
 def create_cnn_model():
     cnn_model = models.Sequential()
     cnn_model.add(layers.Conv2D(16, (3, 3), padding='same', activation='relu', input_shape=(64, 64, 3)))

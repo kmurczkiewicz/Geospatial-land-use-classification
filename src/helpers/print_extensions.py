@@ -11,7 +11,6 @@ def print_title(string):
     
 def print_subtitle(string):
     string = "<span style='color:{}; font-size:{}'>{}</span>".format("white", "18px", string)
-    white_spaces = " " * 10
     display(Markdown("**" + string + "**"))
     
     

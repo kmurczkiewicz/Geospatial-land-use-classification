@@ -1,9 +1,9 @@
 import src.helpers.timer
 import src.helpers.print_extensions
 
-import src.data_operations.analyze_data
-import src.data_operations.load_data
-import src.data_operations.prepare_data
+import src.data.analyze
+import src.data.load
+import src.data.prepare
 
 import src.nn_operations.basic
 
@@ -18,7 +18,7 @@ def stage_preparation():
     timer = src.helpers.timer.Timer()
     src.helpers.print_extensions.print_title("1. Prepare test, train and validation data")
     timer.set_timer()
-    data_dict = src.data_operations.prepare_data.data_init(Path_holder.PATHS)
+    data_dict = src.data.prepare.data_init(Path_holder.PATHS)
     timer.stop_timer()
     src.helpers.print_extensions.print_border()
     return data_dict
@@ -28,7 +28,7 @@ def stage_analyze_data(data_dict):
     timer = src.helpers.timer.Timer()
     timer.set_timer()
     src.helpers.print_extensions.print_title("2. Analyze test, train and validation data")
-    src.data_operations.analyze_data.analyze_data(Path_holder.PATHS, data_dict)
+    src.data.analyze.analyze_data(Path_holder.PATHS, data_dict)
     timer.stop_timer()
     return None
 
@@ -36,7 +36,7 @@ def stage_load_data(data_dict):
     timer = src.helpers.timer.Timer()
     timer.set_timer()
     src.helpers.print_extensions.print_title("2. Load test, train and validation data into memory")
-    data = src.data_operations.load_data.load_data_into_memory(Path_holder.PATHS, data_dict)
+    data = src.data.load.load_into_memory(Path_holder.PATHS, data_dict)
     timer.stop_timer()
     src.helpers.print_extensions.print_border()
     return data
