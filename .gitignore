@@ -9,3 +9,4 @@ artefacts
 
 __pycache__
 cnn_dev_app.egg-info
+.idea/

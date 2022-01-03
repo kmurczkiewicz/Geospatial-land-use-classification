@@ -8,5 +8,5 @@ setup(
    author='Kacper Murczkiewicz',
    author_email='murczkiewiczkacper@gmail.com',
    url="https://github.com/kmurczkiewicz/Sentinel-2-Image-classification-using-CNNs",
-   packages=find_packages(include=['src'])
+   packages=find_packages(include=['bin', 'src'])
 )

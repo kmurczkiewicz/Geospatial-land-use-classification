@@ -5,9 +5,10 @@ import matplotlib.pyplot
 
 import src.helpers.print_extensions
 
+
 def analyze_data(paths, data_dict):
     """
-    Funtion to analyze data distribution in each of train, test and val dataframe.
+    Function to analyze data distribution in each of train, test and val dataframe.
     """
     src.helpers.print_extensions.print_variable("LABEL_MAP:")
     src.helpers.print_extensions.print_dict(paths["LABEL_MAP"])
@@ -22,15 +23,15 @@ def analyze_data(paths, data_dict):
     
     for key, value_dict in data_distribution.items():
         for sub_key, _ in value_dict.items():
-            details = data_dict[key].apply(lambda x : True if x['Label'] == 1 else False, axis = 1)
-            value_dict[sub_key] = len(details[details == True].index)
+            details = data_dict[key].apply(lambda x : True if x['Label'] == 1 else False, axis=1)
+            value_dict[sub_key] = len(details[details is True].index)
         plot(paths, data_distribution, key)
         show_example(paths, data_dict, key)
 
 
 def plot(paths ,data_distribution, key):
     """
-    Funtion to plot data distribution in dictionary.
+    Function to plot data distribution in dictionary.
     """
     src.helpers.print_extensions.print_variable(key)
     x = [paths["LABEL_MAP"][key] for key in data_distribution[key].keys()]
@@ -45,7 +46,7 @@ def plot(paths ,data_distribution, key):
 
 def show_example(paths ,data_dict, key):
     """
-    Funtion to to display 5x5 grid with images and their labels.
+    Function to to display 5x5 grid with images and their labels.
     """
     matplotlib.pyplot.figure(figsize=(10,10))
     for i in range(25):
