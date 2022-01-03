@@ -1,4 +1,3 @@
-"""Imports"""
 import datetime
 import tensorflow as tf
 from tensorflow.keras import layers, models
@@ -11,6 +10,7 @@ import src.helpers.timer
 class Neural_network:
     def __init__(self, input_shape):
         self.input_shape = input_shape
+        self.num_of_classes = 10
         self.model = None
         self.training_history = None
 
@@ -40,7 +40,7 @@ class Neural_network:
 
         cnn_model.add(layers.Flatten())
         cnn_model.add(layers.Dense(64, activation='relu'))
-        cnn_model.add(layers.Dense(10))
+        cnn_model.add(layers.Dense(self.num_of_classes))
 
         self.model = cnn_model
 

@@ -13,23 +13,26 @@ def analyze_data(paths, data_dict):
     src.helpers.print_extensions.print_variable("LABEL_MAP:")
     src.helpers.print_extensions.print_dict(paths["LABEL_MAP"])
     
-    src.helpers.print_extensions.print_subtitle("2.1. Data distibution ")
+    src.helpers.print_extensions.print_subtitle("2.1. Data distribution ")
     
     data_distribution = {
         "test_data_frame" : {key : 0 for key, _ in paths["LABEL_MAP"].items()},
         "train_data_frame": {key : 0 for key, _ in paths["LABEL_MAP"].items()},
         "val_data_frame"  : {key : 0 for key, _ in paths["LABEL_MAP"].items()}
     }
-    
+    print(data_distribution)
+    print("\n\n\n\n")
+    print(data_dict)
     for key, value_dict in data_distribution.items():
         for sub_key, _ in value_dict.items():
-            details = data_dict[key].apply(lambda x : True if x['Label'] == 1 else False, axis=1)
-            value_dict[sub_key] = len(details[details is True].index)
+            details = data_dict[key].apply(lambda x: True if x['Label'] == 1 else False, axis=1)
+            # DO NOT CHANGE THIS CONDITION: details == True TO: details is True, it will break the logic
+            value_dict[sub_key] = len(details[details == True].index)
         plot(paths, data_distribution, key)
         show_example(paths, data_dict, key)
 
 
-def plot(paths ,data_distribution, key):
+def plot(paths, data_distribution, key):
     """
     Function to plot data distribution in dictionary.
     """
@@ -44,7 +47,7 @@ def plot(paths ,data_distribution, key):
     matplotlib.pyplot.show()
     
 
-def show_example(paths ,data_dict, key):
+def show_example(paths, data_dict, key):
     """
     Function to to display 5x5 grid with images and their labels.
     """

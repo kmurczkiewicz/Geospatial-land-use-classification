@@ -8,5 +8,5 @@ testing_notebook.ipynb
 artefacts
 
 __pycache__
-cnn_dev_app.egg-info
+geo_sat_nn_app.egg-info
 .idea/
