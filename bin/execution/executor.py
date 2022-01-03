@@ -2,7 +2,7 @@ import json
 import pathlib
 import os
 
-import src.executor.execute
+import src.execution.executor_source
 
 
 class Executor:
@@ -17,7 +17,7 @@ class Executor:
             "VAL_CSV"          : os.path.join(self.MAIN_PATH, "artefacts/dataset/validation.csv"),
             "LABEL_MAP_PATH"   : os.path.join(self.MAIN_PATH, "artefacts/dataset/label_map.json"),
             "NETWORK_SAVE_DIR" : os.path.join(self.MAIN_PATH, "artefacts/models_pb"),
-            "LABEL_MAP"        : ""
+            "LABEL_MAP"        : os.path.join(self.MAIN_PATH, "")
         }
 
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
@@ -25,29 +25,29 @@ class Executor:
 
     def execute_data_analysis(self):
         # 1. Prepare test, train and validation data. Display the results
-        data_dict = src.executor.execute.stage_preparation(self.PATHS)
+        data_dict = src.execution.executor_source.stage_preparation(self.PATHS)
 
         # 2. Analyze test, train and validation data
-        src.executor.execute.stage_analyze_data(self.PATHS, data_dict)
+        src.execution.executor_source.stage_analyze_data(self.PATHS, data_dict)
 
     def execute_full_flow(self):
         # 1. Prepare test, train and validation data. Display the results
-        data_dict = src.executor.execute.stage_preparation(self.PATHS)
+        data_dict = src.execution.executor_source.stage_preparation(self.PATHS)
 
         # 2. Load test, train and validation data into memory
-        data = src.executor.execute.stage_load_data(self.PATHS, data_dict)
+        data = src.execution.executor_source.stage_load_data(self.PATHS, data_dict)
 
         # 3. Create simple cnn model and compile it
-        cnn_model = src.executor.execute.stage_nn_init(input_shape=(64, 64, 3))
+        cnn_model = src.execution.executor_source.stage_nn_init(input_shape=(64, 64, 3))
 
         # 4. Train the model
-        src.executor.execute.stage_nn_train(cnn_model, data)
+        src.execution.executor_source.stage_nn_train(cnn_model, data)
 
         # 5. Test the model
-        src.executor.execute.stage_nn_test(cnn_model, data)
+        src.execution.executor_source.stage_nn_test(cnn_model, data)
 
         # 6. Save the model
-        src.executor.execute.stage_nn_save(
+        src.execution.executor_source.stage_nn_save(
             self.PATHS["NETWORK_SAVE_DIR"],
             self.DEFAULT_NETWORK_NAME,
             cnn_model
