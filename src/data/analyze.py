@@ -25,9 +25,9 @@ def analyze_data(paths, data_dict):
     print(data_dict)
     for key, value_dict in data_distribution.items():
         for sub_key, _ in value_dict.items():
-            details = data_dict[key].apply(lambda x : True if x['Label'] == 1 else False, axis=1)
-            print(details)
-            value_dict[sub_key] = len(details[details is True].index)
+            details = data_dict[key].apply(lambda x: True if x['Label'] == 1 else False, axis=1)
+            # DO NOT CHANGE THIS CONDITION: details == True TO: details is True, it will break the logic
+            value_dict[sub_key] = len(details[details == True].index)
         plot(paths, data_distribution, key)
         show_example(paths, data_dict, key)
 
