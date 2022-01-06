@@ -2,6 +2,9 @@ import time
 
 
 class Timer:
+    """
+    Helper class to simplify time measuring.
+    """
     def __init__(self):
         self.time_start = 0.0
     

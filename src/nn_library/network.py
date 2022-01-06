@@ -8,16 +8,28 @@ import src.helpers.timer
 
 
 class Neural_network:
-    def __init__(self, input_shape):
+    def __init__(self, nn_topology, input_shape):
+        self.topology = nn_topology
         self.input_shape = input_shape
         self.num_of_classes = 10
         self.model = None
         self.training_history = None
 
     def compile(self, optimizer, loss_function, metrics):
+        """
+        Function to compile network using given params.
+        :param optimizer: str optimizer name to be used in compilation
+        :param loss_function: tf.keras.losses object to measure loss funtionc
+        :param metrics: array of metrics to be measured
+        """
         self.model.compile(optimizer, loss_function, metrics)
 
     def train_cnn_model(self, data: dict, epochs_num: int):
+        """
+        Function to train network using given params.
+        :param data: dict of test, train and validation data to be used in training
+        :param epochs_num: number of training iterations
+        """
         self.training_history = self.model.fit(
             data["X_train"],
             data["y_train"],
@@ -26,25 +38,28 @@ class Neural_network:
         )
 
     def test_network(self, data: dict):
+        """
+        Function to test network on given data.
+        :param data: dict of test, train and validation data to be used in training
+        :return: str network testing accuracy
+        """
         test_loss, test_acc = self.model.evaluate(data["X_test"],  data["y_test"], verbose=2)
         print(f"Test accuracy: {test_acc}")
         return test_acc
 
     def init_network(self):
-        cnn_model = models.Sequential()
-        cnn_model.add(layers.Conv2D(16, (3, 3), padding='same', activation='relu', input_shape=self.input_shape))
-        cnn_model.add(layers.MaxPooling2D((2, 2)))
-        cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
-        cnn_model.add(layers.MaxPooling2D((2, 2)))
-        cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
-
-        cnn_model.add(layers.Flatten())
-        cnn_model.add(layers.Dense(64, activation='relu'))
-        cnn_model.add(layers.Dense(self.num_of_classes))
-
-        self.model = cnn_model
+        """
+        Function to initialize network object topology.
+        """
+        self.model = self.topology(
+            self.input_shape,
+            self.num_of_classes
+        )
 
     def plot_model_result(self):
+        """
+        Function to plot network accuracy and loss function value over training (epochs).
+        """
         matplotlib.pyplot.plot(self.training_history.history['accuracy'], label='accuracy')
         matplotlib.pyplot.plot(self.training_history.history['val_accuracy'], label='val_accuracy')
         matplotlib.pyplot.xlabel('Epoch')
@@ -53,5 +68,10 @@ class Neural_network:
         matplotlib.pyplot.legend(loc='lower right')
 
     def save_model(self, name, directory):
+        """
+        Function to save network in given directory with given name in .pb format.
+        :param name: network file name that will be saved
+        :param directory: directory where network file will be saved
+        """
         date_str = datetime.datetime.now().strftime("%H%M%d%m%y")
         tf.saved_model.save(self.model, f"{directory}\\{name}_{date_str}")

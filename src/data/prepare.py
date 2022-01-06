@@ -7,7 +7,8 @@ import src.helpers.print_extensions
 def data_init(paths):
     """
     Function to read .csv data files into pandas data frames.
-    returns: dict with test, train and validation data frames
+    :param  paths: dict of app paths
+    :return dict with test, train and validation data frames
     """
     return {
         "test_data_frame": pd.read_csv(paths["TEST_CSV"]).drop("Unnamed: 0", axis=1),
@@ -17,6 +18,10 @@ def data_init(paths):
 
 
 def display_prepared_data(data_dict):
+    """
+    Display head of pandas data frames from given dictionary.
+    :param data_dict: dict of train, test, validation pandas data frames
+    """
     for key, data_frame in data_dict.items():
         src.helpers.print_extensions.print_variable(key)
         IPython.display.display(data_frame.head(5))

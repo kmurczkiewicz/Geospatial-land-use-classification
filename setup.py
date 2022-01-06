@@ -7,6 +7,6 @@ setup(
    license="",
    author='Kacper Murczkiewicz',
    author_email='murczkiewiczkacper@gmail.com',
-   url="https://github.com/kmurczkiewicz/Sentinel-2-Image-classification-using-CNNs",
+   url="https://github.com/kmurczkiewicz/Geospatial-land-use-classification",
    packages=find_packages(include=['bin', 'src'])
 )

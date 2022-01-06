@@ -4,11 +4,33 @@ import PIL.Image
 
 
 def load_into_memory(paths, data_dict):
-    """ Load train, test and validation data into memory """
+    """
+    Function to load train, test and validation data into memory
+    :param paths: dict of app paths
+    :param data_dict: dict of train, test, validation pandas data frames
+    :return dict of images in type array and labels in test, train and validation form
+    """
     print("Loading test, train and validation data into memory...")
-    test_data  = [np.asarray(PIL.Image.open(os.path.join(paths["DATASET"], data_dict["test_data_frame"]["Filename"][i]))) for i in range(len(data_dict["test_data_frame"]["Filename"]))]
-    train_data = [np.asarray(PIL.Image.open(os.path.join(paths["DATASET"], data_dict["train_data_frame"]["Filename"][i]))) for i in range(len(data_dict["train_data_frame"]["Filename"]))]
-    val_data   = [np.asarray(PIL.Image.open(os.path.join(paths["DATASET"], data_dict["val_data_frame"]["Filename"][i]))) for i in range(len(data_dict["val_data_frame"]["Filename"]))]
+    test_data  = [
+        np.asarray(
+            PIL.Image.open(
+                os.path.join(paths["DATASET"], data_dict["test_data_frame"]["Filename"][i])
+            )) for i in range(len(data_dict["test_data_frame"]["Filename"]))
+    ]
+
+    train_data = [
+        np.asarray(
+            PIL.Image.open(
+                os.path.join(paths["DATASET"], data_dict["train_data_frame"]["Filename"][i])
+            )) for i in range(len(data_dict["train_data_frame"]["Filename"]))
+    ]
+
+    val_data   = [
+        np.asarray(
+            PIL.Image.open(
+                os.path.join(paths["DATASET"], data_dict["val_data_frame"]["Filename"][i])
+            )) for i in range(len(data_dict["val_data_frame"]["Filename"]))
+    ]
 
     # Normalize pixel values to be between 0 and 1
     test_data = [x / 255.0 for x in test_data]

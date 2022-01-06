@@ -3,12 +3,16 @@ import pathlib
 import os
 
 import src.execution.executor_source
+import src.nn_library.nn_topologies
 
 
 class Executor:
+    """
+    Main class for application execution.
+    """
     def __init__(self):
         self.MAIN_PATH = os.path.dirname(pathlib.Path().resolve())
-        self.DEFAULT_NETWORK_NAME = "small_cnn"
+        self.DEFAULT_NETWORK_NAME = "network"
 
         self.PATHS = {
             "DATASET"          : os.path.join(self.MAIN_PATH, "artefacts/dataset"),
@@ -23,22 +27,35 @@ class Executor:
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
             self.PATHS["LABEL_MAP"] = json.load(json_file)
 
-    def execute_data_analysis(self):
-        # 1. Prepare test, train and validation data. Display the results
-        data_dict = src.execution.executor_source.stage_preparation(self.PATHS)
+        self.NN_TOPOLOGIES = {
+            "A" : src.nn_library.nn_topologies.topology_A
+        }
 
-        # 2. Analyze test, train and validation data
+    def execute_data_analysis(self):
+        """
+        Execute data preparation and data analysis stage.
+        """
+        data_dict = src.execution.executor_source.stage_prepare_data(self.PATHS)
         src.execution.executor_source.stage_analyze_data(self.PATHS, data_dict)
 
-    def execute_full_flow(self):
-        # 1. Prepare test, train and validation data. Display the results
-        data_dict = src.execution.executor_source.stage_preparation(self.PATHS)
+    def execute_full_flow(self, topology):
+        """
+        Execute all stages. Prepare load train, test and validation data into memory,
+        initialize convolutional neural network with given topology, train and test the network.
+        Save the model locally.
+        :param topology: str network topology name
+        """
+        # 1. Prepare test, train and validation data. Display the results.
+        data_dict = src.execution.executor_source.stage_prepare_data(self.PATHS)
 
         # 2. Load test, train and validation data into memory
         data = src.execution.executor_source.stage_load_data(self.PATHS, data_dict)
 
         # 3. Create simple cnn model and compile it
-        cnn_model = src.execution.executor_source.stage_nn_init(input_shape=(64, 64, 3))
+        cnn_model = src.execution.executor_source.stage_nn_init(
+            nn_topology=self.NN_TOPOLOGIES[topology],
+            input_shape=(64, 64, 3)
+        )
 
         # 4. Train the model
         src.execution.executor_source.stage_nn_train(cnn_model, data)
@@ -49,6 +66,6 @@ class Executor:
         # 6. Save the model
         src.execution.executor_source.stage_nn_save(
             self.PATHS["NETWORK_SAVE_DIR"],
-            self.DEFAULT_NETWORK_NAME,
+            self.DEFAULT_NETWORK_NAME + "_" + topology,
             cnn_model
         )
