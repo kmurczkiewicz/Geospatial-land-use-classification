@@ -60,11 +60,15 @@ class Neural_network:
         """
         Function to plot network accuracy and loss function value over training (epochs).
         """
+        max_acc = max(self.training_history.history['accuracy'])
+        max_loss = max(self.training_history.history['loss'])
+
         matplotlib.pyplot.plot(self.training_history.history['accuracy'], label='accuracy')
         matplotlib.pyplot.plot(self.training_history.history['val_accuracy'], label='val_accuracy')
+        matplotlib.pyplot.plot(self.training_history.history['loss'], label='loss')
         matplotlib.pyplot.xlabel('Epoch')
         matplotlib.pyplot.ylabel('Accuracy')
-        matplotlib.pyplot.ylim([0.5, 1])
+        matplotlib.pyplot.ylim([0, max_acc if max_acc > max_loss else max_loss])
         matplotlib.pyplot.legend(loc='lower right')
 
     def save_model(self, name, directory):
@@ -74,4 +78,4 @@ class Neural_network:
         :param directory: directory where network file will be saved
         """
         date_str = datetime.datetime.now().strftime("%H%M%d%m%y")
-        tf.saved_model.save(self.model, f"{directory}\\{name}_{date_str}")
+        self.model.save(f"{directory}\\{name}_{date_str}")

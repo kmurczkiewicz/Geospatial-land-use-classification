@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 
 import src.helpers.timer
@@ -58,6 +59,28 @@ def stage_load_data(paths, data_dict):
     return data
 
 
+def stage_test_saved_networks(paths, data):
+    """
+    Function to load and test all networks created by app.
+    :param paths: dict of app paths
+    :param data: dict of test, train and validation data to be used in training
+    :return: dict of networks
+    """
+    timer = src.helpers.timer.Timer()
+    networks_names = os.listdir(paths["NETWORK_SAVE_DIR"])
+    src.helpers.print_extensions.print_title("3. Test all saved networks")
+
+    for network_name in networks_names:
+        print(f"Testing: {network_name}")
+        timer.set_timer()
+        tmp_network = tf.keras.models.load_model(
+            os.path.join(paths["NETWORK_SAVE_DIR"], network_name)
+        )
+        test_loss, test_acc = tmp_network.evaluate(data["X_test"],  data["y_test"], verbose=2)
+        timer.stop_timer()
+        print("\n")
+
+
 def stage_nn_init(nn_topology, input_shape):
     """
     Execute neural network initialization stage.
@@ -74,7 +97,7 @@ def stage_nn_init(nn_topology, input_shape):
     cnn_model.init_network()
     cnn_model.compile(
         'adam',
-        tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        'sparse_categorical_crossentropy',
         ['accuracy']
     )
     timer.stop_timer()
@@ -82,16 +105,17 @@ def stage_nn_init(nn_topology, input_shape):
     return cnn_model
 
 
-def stage_nn_train(cnn_model: src.nn_library.network.Neural_network, data):
+def stage_nn_train(cnn_model: src.nn_library.network.Neural_network, data, epochs):
     """
     Execute network training stage.
     :param cnn_model: object of type src.nn_library.network.Neural_network
     :param data: dict of test, train and validation data to be used in training
+    :param epochs: number of training iterations
     """
     timer = src.helpers.timer.Timer()
     src.helpers.print_extensions.print_title("4. Train CNN model")
     timer.set_timer()
-    cnn_model.train_cnn_model(data, epochs_num=10)
+    cnn_model.train_cnn_model(data, epochs)
     timer.stop_timer()
     cnn_model.plot_model_result()
 
@@ -115,3 +139,4 @@ def stage_nn_save(save_dir, network_name, cnn_model: src.nn_library.network.Neur
     """
     src.helpers.print_extensions.print_title("6. Save the model")
     cnn_model.save_model(network_name, save_dir)
+
