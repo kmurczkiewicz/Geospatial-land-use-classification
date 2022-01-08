@@ -1,3 +1,5 @@
+import json
+import pathlib
 import os
 import tensorflow as tf
 
@@ -9,6 +11,36 @@ import src.data.load
 import src.data.prepare
 
 import src.nn_library.network
+import src.nn_library.topologies
+
+
+def init_executor():
+    MAIN_PATH = os.path.dirname(pathlib.Path().resolve())
+    DEFAULT_NETWORK_NAME = "network"
+
+    PATHS = {
+        "DATASET": os.path.join(MAIN_PATH, "artefacts/dataset"),
+        "TEST_CSV": os.path.join(MAIN_PATH, "artefacts/dataset/test.csv"),
+        "TRAIN_CSV": os.path.join(MAIN_PATH, "artefacts/dataset/train.csv"),
+        "VAL_CSV": os.path.join(MAIN_PATH, "artefacts/dataset/validation.csv"),
+        "LABEL_MAP_PATH": os.path.join(MAIN_PATH, "artefacts/dataset/label_map.json"),
+        "NETWORK_SAVE_DIR": os.path.join(MAIN_PATH, "artefacts/models_pb"),
+        "LABEL_MAP": os.path.join(MAIN_PATH, "")
+    }
+
+    with open(PATHS["LABEL_MAP_PATH"]) as json_file:
+        PATHS["LABEL_MAP"] = json.load(json_file)
+
+    NN_TOPOLOGIES = {
+        "A": src.nn_library.topologies.topology_A,
+        "B": src.nn_library.topologies.topology_B
+    }
+
+    return {
+        "DEFAULT_NETWORK_NAME" : DEFAULT_NETWORK_NAME,
+        "PATHS" : PATHS,
+        "NN_TOPOLOGIES" : NN_TOPOLOGIES
+    }
 
 
 def stage_prepare_data(paths):
@@ -22,6 +54,7 @@ def stage_prepare_data(paths):
     src.helpers.print_extensions.print_title("1. Prepare test, train and validation data")
     timer.set_timer()
     data_dict = src.data.prepare.data_init(paths)
+    src.data.prepare.display_prepared_data(data_dict)
     timer.stop_timer()
     src.helpers.print_extensions.print_border()
     return data_dict

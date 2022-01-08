@@ -11,26 +11,10 @@ class Executor:
     Main class for application execution.
     """
     def __init__(self):
-        self.MAIN_PATH = os.path.dirname(pathlib.Path().resolve())
-        self.DEFAULT_NETWORK_NAME = "network"
-
-        self.PATHS = {
-            "DATASET"          : os.path.join(self.MAIN_PATH, "artefacts/dataset"),
-            "TEST_CSV"         : os.path.join(self.MAIN_PATH, "artefacts/dataset/test.csv"),
-            "TRAIN_CSV"        : os.path.join(self.MAIN_PATH, "artefacts/dataset/train.csv"),
-            "VAL_CSV"          : os.path.join(self.MAIN_PATH, "artefacts/dataset/validation.csv"),
-            "LABEL_MAP_PATH"   : os.path.join(self.MAIN_PATH, "artefacts/dataset/label_map.json"),
-            "NETWORK_SAVE_DIR" : os.path.join(self.MAIN_PATH, "artefacts/models_pb"),
-            "LABEL_MAP"        : os.path.join(self.MAIN_PATH, "")
-        }
-
-        with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
-            self.PATHS["LABEL_MAP"] = json.load(json_file)
-
-        self.NN_TOPOLOGIES = {
-            "A" : src.nn_library.topologies.topology_A,
-            "B" : src.nn_library.topologies.topology_B
-        }
+        execution_params = src.execution.executor_source.init_executor()
+        self.DEFAULT_NETWORK_NAME = execution_params["DEFAULT_NETWORK_NAME"]
+        self.PATHS = execution_params["PATHS"]
+        self.NN_TOPOLOGIES = execution_params["NN_TOPOLOGIES"]
 
     def execute_data_analysis(self):
         """
@@ -47,7 +31,7 @@ class Executor:
         :param topology: str network topology name
         :param epochs: int number of network training iterations
         """
-        # 1. Prepare test, train and validation data. Display the results.
+        # 1. Prepare test, train and validation data.
         data_dict = src.execution.executor_source.stage_prepare_data(self.PATHS)
 
         # 2. Load test, train and validation data into memory

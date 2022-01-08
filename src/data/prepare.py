@@ -10,6 +10,7 @@ def data_init(paths):
     :param  paths: dict of app paths
     :return dict with test, train and validation data frames
     """
+    print("Loading test, train and validation data into pandas data-frames...")
     return {
         "test_data_frame": pd.read_csv(paths["TEST_CSV"]).drop("Unnamed: 0", axis=1),
         "train_data_frame": pd.read_csv(paths["TRAIN_CSV"]).drop("Unnamed: 0", axis=1),

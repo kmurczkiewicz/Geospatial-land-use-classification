@@ -18,8 +18,8 @@ def analyze_data(paths, data_dict):
     src.helpers.print_extensions.print_subtitle("2. Data distribution ")
     
     data_distribution = {
+        "train_data_frame": {key: 0 for key, _ in paths["LABEL_MAP"].items()},
         "test_data_frame" : {key : 0 for key, _ in paths["LABEL_MAP"].items()},
-        "train_data_frame": {key : 0 for key, _ in paths["LABEL_MAP"].items()},
         "val_data_frame"  : {key : 0 for key, _ in paths["LABEL_MAP"].items()}
     }
 
@@ -41,7 +41,8 @@ def analyze_data(paths, data_dict):
         display_values_distribution_values(distribution_values)
         plot(paths, data_distribution, key)
         display_example(paths, data_dict, key)
-        print("\n\n")
+        print("\n")
+        src.helpers.print_extensions.print_border()
 
 
 def plot(paths, data_distribution, key):
