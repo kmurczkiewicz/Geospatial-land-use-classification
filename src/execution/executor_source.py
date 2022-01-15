@@ -1,7 +1,10 @@
 import json
 import pathlib
 import os
+import IPython.display
+
 import tensorflow as tf
+import pandas as pd
 
 import src.helpers.timer
 import src.helpers.print_extensions
@@ -33,7 +36,8 @@ def init_executor():
 
     NN_TOPOLOGIES = {
         "A": src.nn_library.topologies.topology_A,
-        "B": src.nn_library.topologies.topology_B
+        "B": src.nn_library.topologies.topology_B,
+        "C": src.nn_library.topologies.topology_C
     }
 
     return {
@@ -100,18 +104,44 @@ def stage_test_saved_networks(paths, data):
     :return: dict of networks
     """
     timer = src.helpers.timer.Timer()
-    networks_names = os.listdir(paths["NETWORK_SAVE_DIR"])
     src.helpers.print_extensions.print_title("3. Test all saved networks")
 
-    for network_name in networks_names:
+    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
         print(f"Testing: {network_name}")
         timer.set_timer()
         tmp_network = tf.keras.models.load_model(
             os.path.join(paths["NETWORK_SAVE_DIR"], network_name)
         )
-        test_loss, test_acc = tmp_network.evaluate(data["X_test"],  data["y_test"], verbose=2)
+        test_loss, test_acc = tmp_network.evaluate(data["X_test"],  data["y_test"], verbose=1)
         timer.stop_timer()
         print("\n")
+
+
+def stage_analyze_saved_networks(paths):
+    """
+    Function to load and display analysis all networks created by app.
+    :param paths: dict of app paths
+    """
+    NN_DETAILS_FILE = "network_details.json"
+    timer = src.helpers.timer.Timer()
+    timer.set_timer()
+    src.helpers.print_extensions.print_title("1. Analyze all saved networks")
+    pandas_json_objects_list = []
+    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
+        print(os.path.join(network_name, NN_DETAILS_FILE))
+        pandas_json_object = pd.read_json(
+            os.path.join(paths["NETWORK_SAVE_DIR"], network_name, NN_DETAILS_FILE),
+            lines=True
+        )
+        pandas_json_objects_list.append(pandas_json_object)
+
+    IPython.display.display(
+        pd.concat(
+            pandas_json_objects_list,
+            ignore_index=True
+        ).sort_values(['FTA'], ascending=[False])
+    )
+    timer.stop_timer()
 
 
 def stage_nn_init(nn_topology, input_shape):
@@ -124,13 +154,13 @@ def stage_nn_init(nn_topology, input_shape):
     """
     timer = src.helpers.timer.Timer()
     timer.set_timer()
-    src.helpers.print_extensions.print_title("3. Create and compile CNN model")
+    src.helpers.print_extensions.print_title("3. Create and compile the model")
 
     cnn_model = src.nn_library.network.Neural_network(nn_topology, input_shape)
     cnn_model.init_network()
     cnn_model.compile(
-        'adam',
-        'sparse_categorical_crossentropy',
+        tf.keras.optimizers.Adam(learning_rate=1e-4),
+        tf.keras.losses.SparseCategoricalCrossentropy(),
         ['accuracy']
     )
     timer.stop_timer()
@@ -146,11 +176,12 @@ def stage_nn_train(cnn_model: src.nn_library.network.Neural_network, data, epoch
     :param epochs: number of training iterations
     """
     timer = src.helpers.timer.Timer()
-    src.helpers.print_extensions.print_title("4. Train CNN model")
+    src.helpers.print_extensions.print_title("4. Train the model")
     timer.set_timer()
     cnn_model.train_cnn_model(data, epochs)
     timer.stop_timer()
-    cnn_model.plot_model_result()
+    cnn_model.plot_model_result("accuracy", 0)
+    cnn_model.plot_model_result("loss", 1)
 
 
 def stage_nn_test(cnn_model: src.nn_library.network.Neural_network, data):
@@ -159,7 +190,7 @@ def stage_nn_test(cnn_model: src.nn_library.network.Neural_network, data):
     :param cnn_model: object of type src.nn_library.network.Neural_network
     :param data: dict of test, train and validation data to be used in training
     """
-    src.helpers.print_extensions.print_title("5. Test the CNN model")
+    src.helpers.print_extensions.print_title("5. Test the model")
     cnn_model.test_network(data)
 
 

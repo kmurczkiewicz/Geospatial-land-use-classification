@@ -65,3 +65,6 @@ class Executor:
 
         # 3. Test all saved networks in app
         src.execution.executor_source.stage_test_saved_networks(self.PATHS, data)
+
+    def execute_analyze_networks(self):
+        src.execution.executor_source.stage_analyze_saved_networks(self.PATHS)
