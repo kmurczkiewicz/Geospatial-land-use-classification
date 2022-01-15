@@ -10,3 +10,5 @@ artefacts
 __pycache__
 geo_sat_nn_app.egg-info
 .idea/
+.coverage
+htmlcov
