@@ -1,16 +1,20 @@
 import os
 
 import PIL.Image
+import IPython.display
 import matplotlib.pyplot
+
+import pandas as pd
 
 import src.helpers.print_extensions
 
 
-def analyze_data(paths, data_dict):
+def analyze_data(paths, data_dict, display):
     """
     Function to analyze data distribution in each of train, test and val dataframe.
     :param paths: dict of app paths
     :param data_dict: dict of train, test, validation pandas data frames
+    :param display: bool type, display output (images, plots etc.)
     """
     src.helpers.print_extensions.print_variable("LABEL_MAP:")
     src.helpers.print_extensions.print_dict(paths["LABEL_MAP"])
@@ -37,6 +41,8 @@ def analyze_data(paths, data_dict):
                 "label"  : paths["LABEL_MAP"][sub_key],
                 "data_frame": key
             }
+        if not display:
+            continue
         src.helpers.print_extensions.print_variable(key)
         display_values_distribution_values(distribution_values)
         plot(paths, data_distribution, key)
@@ -83,6 +89,12 @@ def display_example(paths, data_dict, key):
 
 
 def display_values_distribution_values(data_distribution_values):
+    """
+    Function to display quantitative distribution of classes
+    in test, train and validation data frames.
+    :param data_distribution_values: dict containing distribution details of test,
+    train and validation data frames.
+    """
     sum_amount = 0
     for key, dict_value in data_distribution_values.items():
         sum_amount = sum_amount + dict_value["amount"]
@@ -95,3 +107,27 @@ def display_values_distribution_values(data_distribution_values):
             f"\n\t- amount: {dict_value['amount']}"
             f"\n\t- {percent_of_all}% of {dict_value['data_frame']}"
         )
+
+
+def analyze_saved_networks(paths):
+    """
+    Function to analyze saved networks in base app dir. For each network,
+    details .json file is loaded into pandas data frame and displayed. Networks
+    are sorted in data frame descending by FTA (First Test Accuracy).
+    :param paths: dict of app paths
+    """
+    NN_DETAILS_FILE = "network_details.json"
+    pandas_json_objects_list = []
+    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
+        pandas_json_object = pd.read_json(
+            os.path.join(paths["NETWORK_SAVE_DIR"], network_name, NN_DETAILS_FILE),
+            lines=True
+        )
+        pandas_json_objects_list.append(pandas_json_object)
+
+    IPython.display.display(
+        pd.concat(
+            pandas_json_objects_list,
+            ignore_index=True
+        ).sort_values(['FTA'], ascending=[False])
+    )

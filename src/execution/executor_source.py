@@ -1,7 +1,6 @@
 import json
 import pathlib
 import os
-import IPython.display
 
 import tensorflow as tf
 import pandas as pd
@@ -13,12 +12,15 @@ import src.data.analyze
 import src.data.load
 import src.data.prepare
 
+import src.execution.executor_helpers
+
 import src.nn_library.network
 import src.nn_library.topologies
 
 
 def init_executor():
     MAIN_PATH = os.path.dirname(pathlib.Path().resolve())
+    print(MAIN_PATH)
     DEFAULT_NETWORK_NAME = "network"
 
     PATHS = {
@@ -35,9 +37,10 @@ def init_executor():
         PATHS["LABEL_MAP"] = json.load(json_file)
 
     NN_TOPOLOGIES = {
-        "A": src.nn_library.topologies.topology_A,
-        "B": src.nn_library.topologies.topology_B,
-        "C": src.nn_library.topologies.topology_C
+        "TEST" : src.nn_library.topologies.TEST_TOPOLOGY,
+        "A"    : src.nn_library.topologies.topology_A,
+        "B"    : src.nn_library.topologies.topology_B,
+        "C"    : src.nn_library.topologies.topology_C
     }
 
     return {
@@ -47,35 +50,37 @@ def init_executor():
     }
 
 
-def stage_prepare_data(paths):
+def stage_prepare_data(paths, read_head):
     """
     Execute data preparation stage.
     Load test, train and validation .csv files into pandas data frames.
     :param paths: dict of app paths
+    :param read_head: bool, read only 5 rows from test, train and val data frame
     :return dict of train, test, validation pandas data frames
     """
     timer = src.helpers.timer.Timer()
     src.helpers.print_extensions.print_title("1. Prepare test, train and validation data")
     timer.set_timer()
-    data_dict = src.data.prepare.data_init(paths)
+    data_dict = src.data.prepare.data_init(paths, read_head)
     src.data.prepare.display_prepared_data(data_dict)
     timer.stop_timer()
     src.helpers.print_extensions.print_border()
     return data_dict
 
 
-def stage_analyze_data(paths, data_dict):
+def stage_analyze_data(paths, data_dict, display):
     """
     Execute analyze data stage.
     Display label map, amount of class labels in test, train and validation data frame,
     and plot 5x5 images from each dataframe.
     :param paths: dict of app paths
     :param data_dict: dict of train, test, validation pandas data frames
+    :param display: bool type, display output (images, plots etc.)
     """
     timer = src.helpers.timer.Timer()
     timer.set_timer()
     src.helpers.print_extensions.print_title("2. Analyze test, train and validation data")
-    src.data.analyze.analyze_data(paths, data_dict)
+    src.data.analyze.analyze_data(paths, data_dict, display)
     timer.stop_timer()
 
 
@@ -105,16 +110,9 @@ def stage_test_saved_networks(paths, data):
     """
     timer = src.helpers.timer.Timer()
     src.helpers.print_extensions.print_title("3. Test all saved networks")
-
-    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
-        print(f"Testing: {network_name}")
-        timer.set_timer()
-        tmp_network = tf.keras.models.load_model(
-            os.path.join(paths["NETWORK_SAVE_DIR"], network_name)
-        )
-        test_loss, test_acc = tmp_network.evaluate(data["X_test"],  data["y_test"], verbose=1)
-        timer.stop_timer()
-        print("\n")
+    timer.set_timer()
+    src.execution.executor_helpers.test_saved_networks(paths, data)
+    timer.stop_timer()
 
 
 def stage_analyze_saved_networks(paths):
@@ -122,47 +120,36 @@ def stage_analyze_saved_networks(paths):
     Function to load and display analysis all networks created by app.
     :param paths: dict of app paths
     """
-    NN_DETAILS_FILE = "network_details.json"
     timer = src.helpers.timer.Timer()
     timer.set_timer()
     src.helpers.print_extensions.print_title("1. Analyze all saved networks")
-    pandas_json_objects_list = []
-    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
-        print(os.path.join(network_name, NN_DETAILS_FILE))
-        pandas_json_object = pd.read_json(
-            os.path.join(paths["NETWORK_SAVE_DIR"], network_name, NN_DETAILS_FILE),
-            lines=True
-        )
-        pandas_json_objects_list.append(pandas_json_object)
-
-    IPython.display.display(
-        pd.concat(
-            pandas_json_objects_list,
-            ignore_index=True
-        ).sort_values(['FTA'], ascending=[False])
-    )
+    src.data.analyze.analyze_saved_networks(paths)
     timer.stop_timer()
 
 
-def stage_nn_init(nn_topology, input_shape):
+def stage_nn_init(
+        nn_topology,
+        input_shape,
+        optimizer,
+        loss_function,
+        metrics,
+):
     """
     Execute neural network initialization stage.
     Create network object and compile the network.
     :param nn_topology: str topology name to be used
     :param input_shape: tuple of three integers
+    :param optimizer: tf optimizer to be used for network compilation
+    :param loss_function: tf loss function to be used for network compilation
+    :param metrics: list of metrics to be measured for network
     :return: initialized network model
     """
     timer = src.helpers.timer.Timer()
     timer.set_timer()
     src.helpers.print_extensions.print_title("3. Create and compile the model")
-
     cnn_model = src.nn_library.network.Neural_network(nn_topology, input_shape)
     cnn_model.init_network()
-    cnn_model.compile(
-        tf.keras.optimizers.Adam(learning_rate=1e-4),
-        tf.keras.losses.SparseCategoricalCrossentropy(),
-        ['accuracy']
-    )
+    cnn_model.compile(optimizer, loss_function, metrics)
     timer.stop_timer()
     src.helpers.print_extensions.print_border()
     return cnn_model

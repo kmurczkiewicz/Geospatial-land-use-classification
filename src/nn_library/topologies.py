@@ -1,6 +1,23 @@
 from tensorflow.keras import layers, models, activations
 
 
+def TEST_TOPOLOGY(input_shape, num_of_classes):
+    """
+    Function that initializes ANN (Artificial Neural Network) model.
+    Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
+    :param input_shape: input shape for the model
+    :param num_of_classes: number of output classes for the model
+    :return: ANN model
+    """
+    model = models.Sequential()
+    model.add(layers.Flatten(input_shape=input_shape))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(16, activation='relu'))
+    model.add(layers.Dense(num_of_classes, activation='softmax'))
+
+    return model
+
+
 def topology_A(input_shape, num_of_classes):
     """
     Function that initializes ANN (Artificial Neural Network) model.
