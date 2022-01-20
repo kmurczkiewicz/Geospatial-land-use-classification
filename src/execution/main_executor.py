@@ -4,7 +4,6 @@ import os
 
 import src.execution.base_executor
 
-from tensorflow.keras.applications import VGG16
 import tensorflow as tf
 
 
