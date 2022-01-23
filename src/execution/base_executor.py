@@ -95,16 +95,26 @@ class BaseExecutor:
         src.helpers.print_extensions.print_border()
         return data
 
-    def stage_test_saved_networks(self, data):
+    def stage_test_saved_networks(self, data, networks_to_test):
         """
         Function to load and test all networks created by app.
         :param data: dict of test, train and validation data to be used in training
+        :param networks_to_test: list of networks to be tested, if empty list is provided, test all saved networks
         :return: dict of networks
         """
         timer = src.helpers.timer.Timer()
-        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test all saved networks")
+        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test networks")
         timer.set_timer()
-        src.execution.executor_helpers.test_saved_networks(self.PATHS, data)
+        for network_name in filter(
+            lambda x: x in os.listdir(paths["NETWORK_SAVE_DIR"]),
+            networks_to_test
+        ):
+            tmp_network = tf.keras.models.load_model(
+                os.path.join(paths["NETWORK_SAVE_DIR"], network_name)
+            )
+            test_loss, test_acc = tmp_network.evaluate(data["X_test"], data["y_test"], verbose=1)
+            print("\n")
+        src.execution.executor_helpers.test_saved_networks(self.PATHS, data, networks_to_test)
         timer.stop_timer()
 
     def stage_analyze_saved_networks(self):
@@ -167,7 +177,7 @@ class BaseExecutor:
         :param data: dict of test, train and validation data to be used in training
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test the model")
-        cnn_model.test_network(data)
+        cnn_model.test_network(data, self.PATHS["LABEL_MAP"])
 
     def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.network.Neural_network):
         """

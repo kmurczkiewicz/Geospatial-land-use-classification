@@ -10,7 +10,6 @@ import src.nn_library.network
 EXAMPLE_NETWORK = "./artefacts/example_network_model"
 
 
-
 def test_init_executor():
     """
     Function to test if init_executor is executed correctly and no exception is raised.
@@ -68,7 +67,9 @@ def test_stage_test_saved_networks():
         executor.stage_test_saved_networks(
             executor.stage_load_data(
                 executor.stage_prepare_data(read_head=True)
-            )
+            ),
+            [],
+            False
         )
     except Exception:
         pytest.fail("Failed stage: stage_test_saved_networks")
@@ -133,7 +134,8 @@ def test_stage_nn_test():
             tmp_network,
             executor.stage_load_data(
                 executor.stage_prepare_data(read_head=True)
-            )
+            ),
+            False
         )
     except Exception:
         pytest.fail("Failed stage: stage_nn_train")
