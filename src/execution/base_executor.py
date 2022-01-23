@@ -12,8 +12,6 @@ import src.data.analyze
 import src.data.load
 import src.data.prepare
 
-import src.execution.executor_helpers
-
 import src.nn_library.network
 import src.nn_library.topologies
 
@@ -95,27 +93,32 @@ class BaseExecutor:
         src.helpers.print_extensions.print_border()
         return data
 
-    def stage_test_saved_networks(self, data, networks_to_test):
+    def stage_test_saved_networks(self, data, networks_to_test, plot_probability):
         """
         Function to load and test all networks created by app.
         :param data: dict of test, train and validation data to be used in training
         :param networks_to_test: list of networks to be tested, if empty list is provided, test all saved networks
+        :param plot_probability: bool to define if class probability heatmap should be displayed
         :return: dict of networks
         """
         timer = src.helpers.timer.Timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test networks")
-        timer.set_timer()
+        # If test filter is empty, test all networks
+        if not networks_to_test:
+            networks_to_test = os.listdir(self.PATHS["NETWORK_SAVE_DIR"])
+
         for network_name in filter(
-            lambda x: x in os.listdir(paths["NETWORK_SAVE_DIR"]),
+            lambda x: x in os.listdir(self.PATHS["NETWORK_SAVE_DIR"]),
             networks_to_test
         ):
-            tmp_network = tf.keras.models.load_model(
-                os.path.join(paths["NETWORK_SAVE_DIR"], network_name)
+            timer.set_timer()
+            src.helpers.print_extensions.print_subtitle(f"Testing: {network_name}")
+            nn_network_obj = src.nn_library.network.Neural_network()
+            nn_network_obj.model = tf.keras.models.load_model(
+                os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name)
             )
-            test_loss, test_acc = tmp_network.evaluate(data["X_test"], data["y_test"], verbose=1)
-            print("\n")
-        src.execution.executor_helpers.test_saved_networks(self.PATHS, data, networks_to_test)
-        timer.stop_timer()
+            nn_network_obj.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
+            timer.stop_timer()
 
     def stage_analyze_saved_networks(self):
         """
@@ -170,14 +173,15 @@ class BaseExecutor:
         cnn_model.plot_model_result("accuracy", 0)
         cnn_model.plot_model_result("loss", 1)
 
-    def stage_nn_test(self, cnn_model: src.nn_library.network.Neural_network, data):
+    def stage_nn_test(self, cnn_model: src.nn_library.network.Neural_network, data, plot_probability):
         """
         Execute network testing stage.
         :param cnn_model: object of type src.nn_library.network.Neural_network
         :param data: dict of test, train and validation data to be used in training
+        :param plot_probability: bool to define if class probability heatmap should be displayed
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test the model")
-        cnn_model.test_network(data, self.PATHS["LABEL_MAP"])
+        cnn_model.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
 
     def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.network.Neural_network):
         """

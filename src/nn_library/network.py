@@ -1,9 +1,16 @@
 import datetime
 import json
 import os
+import numpy as np
 import tensorflow as tf
+import pandas as pd
+
 from tensorflow.keras import layers, models
+from sklearn.metrics import confusion_matrix
+from IPython.display import display
+
 import matplotlib.pyplot
+import seaborn
 
 import src.helpers.print_extensions
 import src.helpers.timer
@@ -24,7 +31,7 @@ class Neural_network:
 
         self.model = None
         self.training_history = None
-
+        self.training_history_plots = {}
         # First Test Accuracy
         self.FTA = None
         # First Test Loss
@@ -57,17 +64,28 @@ class Neural_network:
             verbose=1
         )
 
-    def test_network(self, data: dict):
+    def test_network(self, data: dict, label_map, plot_probability):
         """
         Function to test network on given data.
         :param data: dict of test, train and validation data to be used in training
+        :param plot_probability: bool to define if class probability heatmap should be displayed
         :return: str network testing accuracy
         """
-        test_loss, test_acc = self.model.evaluate(data["X_test"],  data["y_test"], verbose=2)
+        # Test the network
+        test_loss, test_acc = self.model.evaluate(data["X_test"],  data["y_test"], verbose=1)
         print(f"Test accuracy: {test_acc}")
         if not self.FTA and not self.FTL:
             self.FTA = test_acc
             self.FTL = test_loss
+        # Get class prediction probabilities
+        y_predicted = self.model.predict(data["X_test"])
+        if not plot_probability:
+            return test_acc
+        self.plot_test_confusion_matrix(
+            data["y_test"],
+            y_predicted=np.argmax(y_predicted, axis=1),
+            class_labels=[key for key, value in label_map.items()]
+        )
         return test_acc
 
     def init_network(self):
@@ -78,6 +96,35 @@ class Neural_network:
             self.input_shape,
             self.num_of_classes
         )
+
+    def plot_test_confusion_matrix(self, y_true, y_predicted, class_labels):
+        """
+        Function to display confusion matrix for network class predictions
+        :param y_true: original class labels
+        :param y_predicted: class labels predicted by models
+        :param class_labels: list of all class labels
+        """
+        confusion_matrix_data_frame = pd.DataFrame(
+            confusion_matrix(y_true, y_predicted),
+            class_labels,
+            class_labels
+        )
+        matplotlib.pyplot.figure(num=3, figsize=(10, 10))
+        seaborn.set(font_scale=1)
+        seaborn.heatmap(
+            confusion_matrix_data_frame,
+            annot=True,
+            cmap="Greens",
+            annot_kws={"size": 9},
+            fmt="g"
+        )
+        matplotlib.pyplot.ylabel("Label")
+        matplotlib.pyplot.xlabel("Prediction")
+
+        display(matplotlib.pyplot.figure(num=3))
+
+        self.training_history_plots["prediction"] = matplotlib.pyplot.figure(num=3)
+        matplotlib.pyplot.close()
 
     def plot_model_result(self, mode, figure_num):
         """
@@ -97,6 +144,12 @@ class Neural_network:
             ]
         )
         matplotlib.pyplot.legend(loc='lower right')
+        display(matplotlib.pyplot.figure(num=figure_num))
+        if figure_num == 0:
+            self.training_history_plots["acc"] = matplotlib.pyplot.figure(figure_num)
+        else:
+            self.training_history_plots["loss"] = matplotlib.pyplot.figure(figure_num)
+        matplotlib.pyplot.close()
 
     def save_model(self, name, directory):
         """
@@ -117,9 +170,19 @@ class Neural_network:
             "loss_function": type(self.loss_function).__name__,
             "created"      : date_time.strftime("%H:%M:%S, %d/%m/%Y"),
         }
+        # Save network model
         self.model.save(model_save_dir)
+
+        # Save .json network descriptor
         with open(os.path.join(model_save_dir, "network_details.json"), 'w') as file:
             json.dump(model_details, file)
+
+        # Save training history plots
+        if not self.training_history:
+            return
+        self.training_history_plots["acc"].savefig(os.path.join(model_save_dir, "train_acc_history.png"))
+        self.training_history_plots["loss"].savefig(os.path.join(model_save_dir, "train_loss_history.png"))
+        self.training_history_plots["prediction"].savefig(os.path.join(model_save_dir, "prediction_heatmap.png"))
 
     def train_cnn_model_advanced(self, data: dict, epochs_num: int):
         """
