@@ -29,7 +29,8 @@ class BaseExecutor:
             "VAL_CSV": os.path.join(self.MAIN_PATH, "artefacts/dataset/validation.csv"),
             "LABEL_MAP_PATH": os.path.join(self.MAIN_PATH, "artefacts/dataset/label_map.json"),
             "NETWORK_SAVE_DIR": os.path.join(self.MAIN_PATH, "artefacts/models_pb"),
-            "LABEL_MAP": os.path.join(self.MAIN_PATH, "")
+            "LABEL_MAP": os.path.join(self.MAIN_PATH, ""),
+            "MODEL_CHECKPOINT_PATH": os.path.join(self.MAIN_PATH, "artefacts/model_checkpoint/model_weights.h5")
         }
 
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
@@ -168,7 +169,7 @@ class BaseExecutor:
         timer = src.helpers.timer.Timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Train the model")
         timer.set_timer()
-        cnn_model.train_cnn_model(data, epochs)
+        cnn_model.train_cnn_model(data, epochs, self.PATHS["MODEL_CHECKPOINT_PATH"])
         timer.stop_timer()
         cnn_model.plot_model_result("accuracy", 0)
         cnn_model.plot_model_result("loss", 1)

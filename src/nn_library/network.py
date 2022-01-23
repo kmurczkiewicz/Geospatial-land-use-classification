@@ -48,12 +48,21 @@ class Neural_network:
         self.optimizer = optimizer
         self.model.compile(optimizer, loss_function, metrics)
 
-    def train_cnn_model(self, data: dict, epochs_num: int):
+    def train_cnn_model(self, data: dict, epochs_num: int, checkpoint_filepath):
         """
         Function to train network using given params.
         :param data: dict of test, train and validation data to be used in training
         :param epochs_num: number of training iterations
+        :param checkpoint_filepath: str path to model checkpoint object
         """
+        # Define checkpoint to obtain best model weights from training
+        model_checkpoint_callback  = tf.keras.callbacks.ModelCheckpoint(
+            filepath=checkpoint_filepath,
+            monitor="val_accuracy",
+            mode='max',
+            save_best_only=True
+        )
+        # Train the model
         self.training_history = self.model.fit(
             data["X_train"],
             data["y_train"],
@@ -61,8 +70,11 @@ class Neural_network:
             validation_data=(data["X_val"], data["y_val"]),
             # batch_size=128,
             shuffle=True,
-            verbose=1
+            verbose=1,
+            callbacks=[model_checkpoint_callback]
         )
+        # Load best weights into the model
+        self.model.load_weights(checkpoint_filepath)
 
     def test_network(self, data: dict, label_map, plot_probability):
         """
