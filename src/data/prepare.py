@@ -1,6 +1,9 @@
 import pandas as pd
+import numpy as np
 
 import IPython.display
+import PIL.Image
+
 import src.helpers.print_extensions
 
 
@@ -33,3 +36,14 @@ def display_prepared_data(data_dict):
     for key, data_frame in data_dict.items():
         src.helpers.print_extensions.print_variable(key)
         IPython.display.display(data_frame.head(5))
+
+
+def sat_image_to_tiles(sat_img):
+    tiles = [sat_img[x:x + 64, y:y + 64] for x in range(0, sat_img.shape[0], 64) for y in range(0, sat_img.shape[1], 64)]
+    width, height = PIL.Image.fromarray(sat_img).size
+    tiles_in_row = int(width / 64)
+    tiles_in_col = int(height / 64)
+    print(tiles_in_row)
+    print(tiles_in_col)
+
+    return tiles

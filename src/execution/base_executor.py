@@ -4,9 +4,13 @@ import os
 
 import tensorflow as tf
 import pandas as pd
+import PIL
+import IPython.display
+import numpy as np
 
 import src.helpers.timer
 import src.helpers.print_extensions
+import src.helpers.operations
 
 import src.data.analyze
 import src.data.load
@@ -30,7 +34,9 @@ class BaseExecutor:
             "LABEL_MAP_PATH": os.path.join(self.MAIN_PATH, "artefacts/dataset/label_map.json"),
             "NETWORK_SAVE_DIR": os.path.join(self.MAIN_PATH, "artefacts/models_pb"),
             "LABEL_MAP": os.path.join(self.MAIN_PATH, ""),
-            "MODEL_CHECKPOINT_PATH": os.path.join(self.MAIN_PATH, "artefacts/model_checkpoint/model_weights.h5")
+            "MODEL_CHECKPOINT_PATH": os.path.join(self.MAIN_PATH, "artefacts/model_checkpoint/model_weights.h5"),
+            "SAT_IMG_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images"),
+            "SAT_TILES_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images/tiles"),
         }
 
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
@@ -193,3 +199,37 @@ class BaseExecutor:
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Save the model")
         cnn_model.save_model(network_name, save_dir)
+
+    def stage_load_sat_img(self, sat_img_name):
+        sat_img = src.data.load.load_sat_image_as_array(self.PATHS, sat_img_name)
+        IPython.display.display(PIL.Image.fromarray(sat_img))
+        return sat_img
+
+    def stage_slice_sat_image_into_tiles(self, sat_img):
+        tiles = src.data.prepare.sat_image_to_tiles(sat_img)
+        i = 0
+        for tile in tiles:
+            img = PIL.Image.fromarray(tile, 'RGB')
+            img.save(os.path.join(self.PATHS["SAT_TILES_PATH"], f"{i}.jpg"))
+            i += 1
+
+    def stage_nn_predict_land_use(self, network_name):
+
+        nn = src.nn_library.network.Neural_network()
+        nn.model = tf.keras.models.load_model(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name))
+
+        tile_list = os.listdir(self.PATHS["SAT_TILES_PATH"])
+        tile_list = src.helpers.operations.natural_sort(tile_list)
+
+        for tile in tile_list:
+            tile_img = PIL.Image.open(os.path.join(self.PATHS["SAT_TILES_PATH"], tile))
+
+            tile_arr = np.asarray(tile_img)
+            tile_arr = tile_arr / 255.0
+            tile_arr = np.array(tile_arr).reshape(1, 64, 64, 3)
+
+            IPython.display.display(tile_img)
+
+            predicted_class = nn.single_class_prediction(tile_arr)
+            predicted_label = list(self.PATHS["LABEL_MAP"].keys())[list(self.PATHS["LABEL_MAP"].values()).index(predicted_class)]
+            print(predicted_label)

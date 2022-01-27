@@ -49,3 +49,20 @@ def load_into_memory(paths, data_dict):
         "X_val"   : np.array(val_data),
         "y_val"   : np.array(val_labels)
     }
+
+
+def load_sat_image_as_array(paths, img_name):
+    """
+    Function to load a satellite image and resize its width and height to multiplication of 64.
+    :param paths: dict of app paths
+    :param img_name: str name of image to be loaded
+    :return: image in numpy array type
+    """
+    img = PIL.Image.open(os.path.join(paths["SAT_IMG_PATH"], img_name))
+    original_width, original_height = img.size
+    fixed_width = original_width - (original_width % 64)
+    fixed_height = original_height - (original_height % 64)
+    img = img.resize((fixed_width, fixed_height), PIL.Image.ANTIALIAS)
+
+    return np.asarray(img)
+

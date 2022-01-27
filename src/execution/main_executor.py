@@ -66,3 +66,8 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         Execute analyze networks stage. Analyze all networks saved in app default dir.
         """
         self.stage_analyze_saved_networks()
+
+    def execute_land_use_classification_use_case(self, sat_img_name, network_name):
+        sat_img = self.stage_load_sat_img(sat_img_name)
+        self.stage_slice_sat_image_into_tiles(sat_img)
+        self.stage_nn_predict_land_use(network_name)

@@ -1,8 +1,8 @@
 import os
 
 import PIL.Image
-import IPython.display
 import matplotlib.pyplot
+import IPython.display
 
 import pandas as pd
 
