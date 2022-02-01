@@ -68,7 +68,7 @@ class Neural_network:
             data["y_train"],
             epochs=epochs_num,
             validation_data=(data["X_val"], data["y_val"]),
-            # batch_size=128,
+            batch_size=128,
             shuffle=True,
             verbose=1,
             callbacks=[model_checkpoint_callback]
@@ -197,6 +197,11 @@ class Neural_network:
         self.training_history_plots["prediction"].savefig(os.path.join(model_save_dir, "prediction_heatmap.png"))
 
     def single_class_prediction(self, input):
+        """
+        Function to perform prediction on given image.
+        :param input: image form of numpy array
+        :return: predicted class value
+        """
         y_predicted = self.model.predict(input)
         class_predicted = np.argmax(y_predicted, axis=1)
         return class_predicted[0]

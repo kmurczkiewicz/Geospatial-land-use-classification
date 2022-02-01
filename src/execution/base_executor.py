@@ -37,6 +37,7 @@ class BaseExecutor:
             "MODEL_CHECKPOINT_PATH": os.path.join(self.MAIN_PATH, "artefacts/model_checkpoint/model_weights.h5"),
             "SAT_IMG_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images"),
             "SAT_TILES_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images/tiles"),
+            "SAT_MAP_TILES_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images/tiles_map"),
         }
 
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
@@ -46,7 +47,8 @@ class BaseExecutor:
             "TEST": src.nn_library.topologies.TEST_TOPOLOGY,
             "A": src.nn_library.topologies.topology_A,
             "B": src.nn_library.topologies.topology_B,
-            "C": src.nn_library.topologies.topology_C
+            "C": src.nn_library.topologies.topology_C,
+            "D": src.nn_library.topologies.topology_D
         }
 
     def _get_execution_num(self):
@@ -187,8 +189,11 @@ class BaseExecutor:
         :param data: dict of test, train and validation data to be used in training
         :param plot_probability: bool to define if class probability heatmap should be displayed
         """
+        timer = src.helpers.timer.Timer()
+        timer.set_timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test the model")
         cnn_model.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
+        timer.stop_timer()
 
     def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.network.Neural_network):
         """
@@ -197,23 +202,49 @@ class BaseExecutor:
         :param network_name: str name of saved network
         :param cnn_model: object of type src.nn_library.network.Neural_network
         """
+        timer = src.helpers.timer.Timer()
+        timer.set_timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Save the model")
         cnn_model.save_model(network_name, save_dir)
+        timer.stop_timer()
 
     def stage_load_sat_img(self, sat_img_name):
+        """
+        Execute load satellite image stage. Satellite image with given name is loaded from default
+        app directory as numpy array.
+        :param sat_img_name: str name of satellite image to be loaded
+        :return: numpy array representing satellite image
+        """
         sat_img = src.data.load.load_sat_image_as_array(self.PATHS, sat_img_name)
+        src.helpers.print_extensions.print_subtitle(f"1. Original satellite image - {sat_img_name}")
         IPython.display.display(PIL.Image.fromarray(sat_img))
         return sat_img
 
     def stage_slice_sat_image_into_tiles(self, sat_img):
-        tiles = src.data.prepare.sat_image_to_tiles(sat_img)
+        """
+        Function to split satellite image into 64x64 tiles. Tiles are further saved
+        in self.PATHS["SAT_TILES_PATH"].
+        :param sat_img: numpy array representing satellite image
+        """
+        tiles_dict = src.data.prepare.sat_image_to_tiles(sat_img)
+        tiles = tiles_dict["tiles"]
         i = 0
         for tile in tiles:
             img = PIL.Image.fromarray(tile, 'RGB')
-            img.save(os.path.join(self.PATHS["SAT_TILES_PATH"], f"{i}.jpg"))
+            img.save(os.path.join(self.PATHS["SAT_TILES_PATH"], f"{i}.png"))
             i += 1
+        return {
+            "tiles_in_row" : tiles_dict["tiles_in_row"],
+            "tiles_in_col" : tiles_dict["tiles_in_col"]
+        }
 
     def stage_nn_predict_land_use(self, network_name):
+        """
+        Function to perform classification on each tile present in default tiles directory.
+        :param network_name: str network name to define which network shall be used for classification.
+        """
+        timer = src.helpers.timer.Timer()
+        timer.set_timer()
 
         nn = src.nn_library.network.Neural_network()
         nn.model = tf.keras.models.load_model(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name))
@@ -228,8 +259,91 @@ class BaseExecutor:
             tile_arr = tile_arr / 255.0
             tile_arr = np.array(tile_arr).reshape(1, 64, 64, 3)
 
-            IPython.display.display(tile_img)
+            # IPython.display.display(tile_img)
 
             predicted_class = nn.single_class_prediction(tile_arr)
             predicted_label = list(self.PATHS["LABEL_MAP"].keys())[list(self.PATHS["LABEL_MAP"].values()).index(predicted_class)]
-            print(predicted_label)
+            # print(predicted_label)
+
+            single_mapped_tile = PIL.Image.new(
+                "RGB",
+                (64, 64),
+                PIL.ImageColor.getrgb(
+                    src.helpers.operations.get_classification_color(predicted_label)
+                )
+            )
+
+            single_mapped_tile.save(
+                os.path.join(
+                    self.PATHS["SAT_MAP_TILES_PATH"],
+                    pathlib.Path(tile).stem + ".png",
+                )
+            )
+
+        timer.stop_timer()
+
+    def stage_generate_land_use_map(self, tiles_row_col, sat_img_name):
+        mapped_tile_list = os.listdir(self.PATHS["SAT_MAP_TILES_PATH"])
+        mapped_tile_list = src.helpers.operations.natural_sort(mapped_tile_list)
+
+        single_row = PIL.Image.new(
+            'RGBA',
+            (
+                tiles_row_col["tiles_in_row"] * 64,
+                64
+            )
+        )
+
+        tile_num = 0
+        mapped_rows = []
+
+        for tile in mapped_tile_list:
+            if tile_num < tiles_row_col["tiles_in_row"]  - 1:
+                single_row.paste(
+                    PIL.Image.open(os.path.join(self.PATHS["SAT_MAP_TILES_PATH"], tile)),
+                    (tile_num * 64, 0)
+                )
+                tile_num += 1
+                continue
+            single_row.paste(
+                PIL.Image.open(os.path.join(self.PATHS["SAT_MAP_TILES_PATH"], tile)),
+                (tile_num * 64, 0)
+            )
+            mapped_rows.append(single_row)
+            tile_num = 0
+            single_row = PIL.Image.new(
+                'RGBA',
+                (
+                    tiles_row_col["tiles_in_row"] * 64,
+                    64
+                )
+            )
+
+        mapped_image = PIL.Image.new(
+            'RGBA',
+            (
+                tiles_row_col["tiles_in_row"] * 64,
+                tiles_row_col["tiles_in_col"] * 64
+            )
+        )
+
+        row_num = 0
+
+        for row in mapped_rows:
+            mapped_image.paste(
+                row,
+                (0, row_num * 64)
+            )
+            row_num += 1
+
+        original_sat_img = PIL.Image.fromarray(src.data.load.load_sat_image_as_array(self.PATHS, sat_img_name))
+
+        # Set image transparency to 50% (256/128)
+        mapped_image.putalpha(128)
+
+        original_sat_img.paste(mapped_image, (0, 0), mapped_image)
+        src.helpers.print_extensions.print_subtitle(f"2. Land use classification map - {sat_img_name}")
+        IPython.display.display(mapped_image)
+
+        src.helpers.print_extensions.print_subtitle(f"3. Satellite image with applied land use map - {sat_img_name}")
+        IPython.display.display(original_sat_img)

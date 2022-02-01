@@ -68,6 +68,14 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         self.stage_analyze_saved_networks()
 
     def execute_land_use_classification_use_case(self, sat_img_name, network_name):
+        """
+        Execute land use classification use case stage. Load satellite image, split it into tiles
+        and perform classification with given network on each tile. Further, land use classification map
+        is generated based on networks' predictions.
+        :param sat_img_name: str name of satellite image to be used
+        :param network_name: str name of network to used for land use classification on given image
+        """
         sat_img = self.stage_load_sat_img(sat_img_name)
-        self.stage_slice_sat_image_into_tiles(sat_img)
+        tiles_row_col = self.stage_slice_sat_image_into_tiles(sat_img)
         self.stage_nn_predict_land_use(network_name)
+        self.stage_generate_land_use_map(tiles_row_col, sat_img_name)

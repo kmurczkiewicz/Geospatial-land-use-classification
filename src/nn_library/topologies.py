@@ -3,7 +3,7 @@ from tensorflow.keras import layers, models, activations
 
 def TEST_TOPOLOGY(input_shape, num_of_classes):
     """
-    Function that initializes ANN (Artificial Neural Network) model.
+    Function that initializes ANN (Artificial Neural Network) model using TEST_TOPOLOGY.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
@@ -20,7 +20,7 @@ def TEST_TOPOLOGY(input_shape, num_of_classes):
 
 def topology_A(input_shape, num_of_classes):
     """
-    Function that initializes ANN (Artificial Neural Network) model.
+    Function that initializes ANN (Artificial Neural Network) model using A topology.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
@@ -40,7 +40,7 @@ def topology_A(input_shape, num_of_classes):
 
 def topology_B(input_shape, num_of_classes):
     """
-    Function that initializes CNN (Convolutional Neural Network) model.
+    Function that initializes small CNN (Convolutional Neural Network) model using B topology.
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: CNN model
@@ -63,16 +63,16 @@ def topology_B(input_shape, num_of_classes):
 
 def topology_C(input_shape, num_of_classes):
     """
-    Function that initializes experimental network model.
+    Function that initializes CNN (Convolutional Neural Network) model using C topology.
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
-    :return: Experimental neural network model
+    :return: CNN model
     """
     cnn_model = models.Sequential()
 
     cnn_model.add(layers.InputLayer(input_shape=input_shape))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
-    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2)))
 
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
@@ -90,6 +90,47 @@ def topology_C(input_shape, num_of_classes):
     cnn_model.add(layers.Flatten())
     cnn_model.add(layers.Dropout(0.3))
     cnn_model.add(layers.Dense(512, activation='relu'))
+    cnn_model.add(layers.Dense(512, activation='relu'))
+    cnn_model.add(layers.Dense(num_of_classes, activation='softmax'))
+    cnn_model.summary()
+
+    return cnn_model
+
+
+def topology_D(input_shape, num_of_classes):
+    """
+    Function that initializes CNN (Convolutional Neural Network) model using D topology.
+    :param input_shape: input shape for the model
+    :param num_of_classes: number of output classes for the model
+    :return: CNN model
+    """
+    cnn_model = models.Sequential()
+    # Block 1
+    cnn_model.add(layers.InputLayer(input_shape=input_shape))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+    # Block 2
+    cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+    # Block 3
+    cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+    # Block 4
+    cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+    # Top
+    cnn_model.add(layers.Flatten())
+    cnn_model.add(layers.Dropout(0.4))
     cnn_model.add(layers.Dense(512, activation='relu'))
     cnn_model.add(layers.Dense(num_of_classes, activation='softmax'))
     cnn_model.summary()

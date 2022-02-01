@@ -41,9 +41,16 @@ def display_prepared_data(data_dict):
 def sat_image_to_tiles(sat_img):
     tiles = [sat_img[x:x + 64, y:y + 64] for x in range(0, sat_img.shape[0], 64) for y in range(0, sat_img.shape[1], 64)]
     width, height = PIL.Image.fromarray(sat_img).size
+
     tiles_in_row = int(width / 64)
     tiles_in_col = int(height / 64)
-    print(tiles_in_row)
-    print(tiles_in_col)
 
-    return tiles
+    print(f"Width: {tiles_in_row} tiles of shape 64x64")
+    print(f"Height: {tiles_in_col} tiles of shape 64x64")
+    print(f"Image was splitted into: {tiles_in_row * tiles_in_col} tiles of shape 64x64")
+
+    return {
+        "tiles"        : tiles,
+        "tiles_in_row" : tiles_in_row,
+        "tiles_in_col" : tiles_in_col
+    }
