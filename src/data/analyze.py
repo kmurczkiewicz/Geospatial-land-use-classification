@@ -6,7 +6,7 @@ import IPython.display
 
 import pandas as pd
 
-import src.helpers.print_extensions
+import src.helpers
 
 
 def analyze_data(paths, data_dict, display):
