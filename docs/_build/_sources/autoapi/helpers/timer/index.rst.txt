@@ -1,0 +1,34 @@
+:py:mod:`helpers.timer`
+=======================
+
+.. py:module:: helpers.timer
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   helpers.timer.Timer
+
+
+
+
+.. py:class:: Timer
+
+   Helper class to simplify time measuring.
+
+   .. py:method:: set_timer(self)
+
+      Set time on timer object
+
+
+   .. py:method:: stop_timer(self)
+
+      Stop time on timer object and display amount of time that passed and reset timer.
+
+
+

@@ -8,6 +8,11 @@ import tensorflow as tf
 
 
 class MainExecutor(src.execution.base_executor.BaseExecutor):
+    """
+    Main executor class that defines execution blocks to perform complex tasks using partial stages
+    from parent BaseExecutor class.
+    """
+
     def __init__(self, display):
         super().__init__()
         self.display = display
@@ -24,6 +29,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         Execute all stages. Prepare load train, test and validation data into memory,
         initialize convolutional neural network with given topology, train and test the network.
         Save the model locally.
+
         :param topology: str network topology name
         :param epochs: int number of network training iterations
         :param optimizer: tf optimizer to be used for network compilation
@@ -54,6 +60,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
     def execute_test_networks(self, networks_to_test=[], plot_probability=True):
         """
         Execute test networks stage. Test all networks saved in app default dir.
+
         :param networks_to_test: list of networks to be tested, if empty list is provided, test all saved networks
         :param plot_probability: bool to define if class probability heatmap should be displayed
         """
@@ -72,6 +79,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         Execute land use classification use case stage. Load satellite image, split it into tiles
         and perform classification with given network on each tile. Further, land use classification map
         is generated based on networks' predictions.
+
         :param sat_img_list: list of str names of satellite images to be used
         :param network_name: str name of network to be used for land use classification on given sat image
         """

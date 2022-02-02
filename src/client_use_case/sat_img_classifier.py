@@ -13,6 +13,7 @@ import src.helpers.print_extensions
 def _natural_sort(list_to_sort):
     """
     Function to perform natural sort on given list.
+
     :param list_to_sort: list to be sorted using natural sort algorithm
     :return: list sorted in natural sort order
     """
@@ -45,6 +46,7 @@ class SatelliteImageClassifier:
     def _load_sat_image_as_array(self, sat_image):
         """
         Function to load a satellite image and resize its width and height to multiplication of 64.
+
         :param sat_image: str name of satellite image to be loaded as numpy array.
         :return: numpy array representing given satellite image
         """
@@ -62,6 +64,7 @@ class SatelliteImageClassifier:
     def _split_sat_image_to_tiles(self, sat_image):
         """
         Function to split satellite image into multiple 64x64 tiles, which are saved locally.
+
         :param sat_image: str name of satellite image to be splitted into 64x64 tiles.
         :return: dict containing image dimensions in number of tiles
         """
@@ -114,6 +117,7 @@ class SatelliteImageClassifier:
         Function to generate land use map for given satellite image. Land is map is generated based on
         mapped tiles (tiles which color represents class). First, image rows are generated from tiles, later
         on rows are concatenated into single image, which is final land use classification map.
+
         :param tiles_row_col: dict containing image dimensions in number of tiles
         :param sat_image: str name of satellite image for which land use map shall be generated
         :param original_img_arr: numpy array representing original sat image

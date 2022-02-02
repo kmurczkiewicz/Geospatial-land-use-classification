@@ -22,6 +22,8 @@ import src.client_use_case.sat_img_classifier
 
 
 class BaseExecutor:
+    """Base executor class defining partial execution stages"""
+
     def __init__(self):
         self.MAIN_PATH = os.path.dirname(pathlib.Path().resolve())
         self.DEFAULT_NETWORK_NAME = "network"
@@ -60,6 +62,7 @@ class BaseExecutor:
         """
         Execute data preparation stage.
         Load test, train and validation .csv files into pandas data frames.
+
         :param read_head: bool, read only 5 rows from test, train and val data frame
         :return dict of train, test, validation pandas data frames
         """
@@ -77,6 +80,7 @@ class BaseExecutor:
         Execute analyze data stage.
         Display label map, amount of class labels in test, train and validation data frame,
         and plot 5x5 images from each dataframe.
+
         :param data_dict: dict of train, test, validation pandas data frames
         :param display: bool type, display output (images, plots etc.)
         """
@@ -90,6 +94,7 @@ class BaseExecutor:
         """
         Execute load data stage.
         Load test, train and validation data into memory.
+
         :param data_dict: dict of train, test, validation pandas data frames
         :return: dict of test, train and validation data
         """
@@ -106,6 +111,7 @@ class BaseExecutor:
     def stage_test_saved_networks(self, data, networks_to_test, plot_probability):
         """
         Function to load and test all networks created by app.
+
         :param data: dict of test, train and validation data to be used in training
         :param networks_to_test: list of networks to be tested, if empty list is provided, test all saved networks
         :param plot_probability: bool to define if class probability heatmap should be displayed
@@ -151,6 +157,7 @@ class BaseExecutor:
         """
         Execute neural network initialization stage.
         Create network object and compile the network.
+
         :param nn_topology: str topology name to be used
         :param input_shape: tuple of three integers
         :param optimizer: tf optimizer to be used for network compilation
@@ -171,6 +178,7 @@ class BaseExecutor:
     def stage_nn_train(self, cnn_model: src.nn_library.network.Neural_network, data, epochs):
         """
         Execute network training stage.
+
         :param cnn_model: object of type src.nn_library.network.Neural_network
         :param data: dict of test, train and validation data to be used in training
         :param epochs: number of training iterations
@@ -186,6 +194,7 @@ class BaseExecutor:
     def stage_nn_test(self, cnn_model: src.nn_library.network.Neural_network, data, plot_probability):
         """
         Execute network testing stage.
+
         :param cnn_model: object of type src.nn_library.network.Neural_network
         :param data: dict of test, train and validation data to be used in training
         :param plot_probability: bool to define if class probability heatmap should be displayed
@@ -199,6 +208,7 @@ class BaseExecutor:
     def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.network.Neural_network):
         """
         Execute save network stage. Save network in given dir with given name in .pb format.
+
         :param save_dir: str where network model will be saved in .pb format
         :param network_name: str name of saved network
         :param cnn_model: object of type src.nn_library.network.Neural_network
@@ -211,10 +221,11 @@ class BaseExecutor:
 
     def stage_run_sat_img_classifier(self, sat_img_list, network_name):
         """
+        Initialize SatelliteImageClassifier object and perform land use classification on given list
+        of satellite images.
 
         :param sat_img_list: list of str names of satellite images to be used
         :param network_name: str name of network to be used for land use classification on given sat image
-        :return:
         """
         sat_img_classifier = src.client_use_case.sat_img_classifier.SatelliteImageClassifier(
             self.PATHS,

@@ -1,0 +1,67 @@
+:py:mod:`data.analyze`
+======================
+
+.. py:module:: data.analyze
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   data.analyze.analyze_data
+   data.analyze.plot
+   data.analyze.display_example
+   data.analyze.display_values_distribution_values
+   data.analyze.analyze_saved_networks
+
+
+
+.. py:function:: analyze_data(paths, data_dict, display)
+
+   Function to analyze data distribution in each of train, test and val dataframe.
+
+   :param paths: dict of app paths
+   :param data_dict: dict of train, test, validation pandas data frames
+   :param display: bool type, display output (images, plots etc.)
+
+
+.. py:function:: plot(paths, data_distribution, key)
+
+   Function to plot data distribution in dictionary.
+
+   :param paths: dict of app paths
+   :param data_distribution: dict of data distribution in test, train and val data frames
+   :param key: str key to data_distribution
+
+
+.. py:function:: display_example(paths, data_dict, key)
+
+   Function to display 5x5 grid with images and their labels.
+
+   :param paths: dict of app paths
+   :param data_dict: dict of train, test, validation pandas data frames
+   :param key: str key to data_dict
+
+
+.. py:function:: display_values_distribution_values(data_distribution_values)
+
+   Function to display quantitative distribution of classes
+   in test, train and validation data frames.
+
+   :param data_distribution_values: dict containing distribution details of test, train and validation data frames.
+
+
+.. py:function:: analyze_saved_networks(paths)
+
+   Function to analyze saved networks in base app dir. For each network,
+   details .json file is loaded into pandas data frame and displayed. Networks
+   are sorted in data frame descending by FTA (First Test Accuracy).
+
+   :param paths: dict of app paths
+
+

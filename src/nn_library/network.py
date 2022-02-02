@@ -18,6 +18,8 @@ import src.nn_library.topologies
 
 
 class Neural_network:
+    """Class to unify and optimize creation of neural networks using different set of parameters."""
+
     def __init__(self,
                  nn_topology=src.nn_library.topologies.topology_A,
                  input_shape=(64, 64, 3)
@@ -40,6 +42,7 @@ class Neural_network:
     def compile(self, optimizer, loss_function, metrics):
         """
         Function to compile network using given params.
+
         :param optimizer: str optimizer name to be used in compilation
         :param loss_function: tf.keras.losses object to measure loss funtionc
         :param metrics: array of metrics to be measured
@@ -51,6 +54,7 @@ class Neural_network:
     def train_cnn_model(self, data: dict, epochs_num: int, checkpoint_filepath):
         """
         Function to train network using given params.
+
         :param data: dict of test, train and validation data to be used in training
         :param epochs_num: number of training iterations
         :param checkpoint_filepath: str path to model checkpoint object
@@ -79,6 +83,7 @@ class Neural_network:
     def test_network(self, data: dict, label_map, plot_probability):
         """
         Function to test network on given data.
+
         :param data: dict of test, train and validation data to be used in training
         :param plot_probability: bool to define if class probability heatmap should be displayed
         :return: str network testing accuracy
@@ -112,6 +117,7 @@ class Neural_network:
     def plot_test_confusion_matrix(self, y_true, y_predicted, class_labels):
         """
         Function to display confusion matrix for network class predictions
+
         :param y_true: original class labels
         :param y_predicted: class labels predicted by models
         :param class_labels: list of all class labels
@@ -141,6 +147,7 @@ class Neural_network:
     def plot_model_result(self, mode, figure_num):
         """
         Function to plot network accuracy and loss function value over training (epochs).
+
         :param mode: str plotting mode, could be 'accuracy' or 'loss'
         :param figure_num: int number defining which plot to use
         """
@@ -167,6 +174,7 @@ class Neural_network:
         """
         Function to save network in given directory with given name in .pb format, and
         .json file containing network details.
+
         :param name: network file name that will be saved
         :param directory: directory where network file will be saved
         """
@@ -199,6 +207,7 @@ class Neural_network:
     def single_class_prediction(self, input):
         """
         Function to perform prediction on given image.
+
         :param input: image form of numpy array
         :return: predicted class value
         """

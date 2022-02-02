@@ -6,6 +6,7 @@ import PIL.Image
 def load_into_memory(paths, data_dict):
     """
     Function to load train, test and validation data into memory
+
     :param paths: dict of app paths
     :param data_dict: dict of train, test, validation pandas data frames
     :return dict of images in type array and labels in test, train and validation form
@@ -22,7 +23,8 @@ def load_into_memory(paths, data_dict):
         np.asarray(
             PIL.Image.open(
                 os.path.join(paths["DATASET"], data_dict["train_data_frame"]["Filename"][i])
-            )) for i in range(len(data_dict["train_data_frame"]["Filename"]))
+            )
+        ) for i in range(len(data_dict["train_data_frame"]["Filename"]))
     ]
 
     val_data   = [
@@ -49,5 +51,6 @@ def load_into_memory(paths, data_dict):
         "X_val"   : np.array(val_data),
         "y_val"   : np.array(val_labels)
     }
+
 
 

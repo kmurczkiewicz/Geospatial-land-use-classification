@@ -10,6 +10,7 @@ import src.helpers.print_extensions
 def data_init(paths, read_head):
     """
     Function to read .csv data files into pandas data frames.
+
     :param paths: dict of app paths
     :param read_head: bool, read only 5 rows from test, train and val data frame
     :return dict with test, train and validation data frames
@@ -31,10 +32,9 @@ def data_init(paths, read_head):
 def display_prepared_data(data_dict):
     """
     Display head of pandas data frames from given dictionary.
+
     :param data_dict: dict of train, test, validation pandas data frames
     """
     for key, data_frame in data_dict.items():
         src.helpers.print_extensions.print_variable(key)
         IPython.display.display(data_frame.head(5))
-
-

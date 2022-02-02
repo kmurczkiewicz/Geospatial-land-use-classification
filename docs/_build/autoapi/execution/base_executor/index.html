@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>execution.base_executor &mdash; geo_sat_nn_app 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> geo_sat_nn_app
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">geo_sat_nn_app</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">execution.base_executor</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/execution/base_executor/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-execution.base_executor">
+<span id="execution-base-executor"></span><h1><a class="reference internal" href="#module-execution.base_executor" title="execution.base_executor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">execution.base_executor</span></code></a><a class="headerlink" href="#module-execution.base_executor" title="Permalink to this headline"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#execution.base_executor.BaseExecutor" title="execution.base_executor.BaseExecutor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseExecutor</span></code></a></p></td>
+<td><p>Base executor class defining partial execution stages</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">execution.base_executor.</span></span><span class="sig-name descname"><span class="pre">BaseExecutor</span></span><a class="headerlink" href="#execution.base_executor.BaseExecutor" title="Permalink to this definition"></a></dt>
+<dd><p>Base executor class defining partial execution stages</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor._get_execution_num">
+<span class="sig-name descname"><span class="pre">_get_execution_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor._get_execution_num" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_prepare_data">
+<span class="sig-name descname"><span class="pre">stage_prepare_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_head</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_prepare_data" title="Permalink to this definition"></a></dt>
+<dd><p>Execute data preparation stage.
+Load test, train and validation .csv files into pandas data frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>read_head</strong> – bool, read only 5 rows from test, train and val data frame</p>
+</dd>
+</dl>
+<p>:return dict of train, test, validation pandas data frames</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_analyze_data">
+<span class="sig-name descname"><span class="pre">stage_analyze_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_analyze_data" title="Permalink to this definition"></a></dt>
+<dd><p>Execute analyze data stage.
+Display label map, amount of class labels in test, train and validation data frame,
+and plot 5x5 images from each dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dict</strong> – dict of train, test, validation pandas data frames</p></li>
+<li><p><strong>display</strong> – bool type, display output (images, plots etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_load_data">
+<span class="sig-name descname"><span class="pre">stage_load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_load_data" title="Permalink to this definition"></a></dt>
+<dd><p>Execute load data stage.
+Load test, train and validation data into memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data_dict</strong> – dict of train, test, validation pandas data frames</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict of test, train and validation data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_test_saved_networks">
+<span class="sig-name descname"><span class="pre">stage_test_saved_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">networks_to_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_probability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_test_saved_networks" title="Permalink to this definition"></a></dt>
+<dd><p>Function to load and test all networks created by app.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – dict of test, train and validation data to be used in training</p></li>
+<li><p><strong>networks_to_test</strong> – list of networks to be tested, if empty list is provided, test all saved networks</p></li>
+<li><p><strong>plot_probability</strong> – bool to define if class probability heatmap should be displayed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict of networks</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_analyze_saved_networks">
+<span class="sig-name descname"><span class="pre">stage_analyze_saved_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_analyze_saved_networks" title="Permalink to this definition"></a></dt>
+<dd><p>Function to load and display analysis all networks created by app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_nn_init">
+<span class="sig-name descname"><span class="pre">stage_nn_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_nn_init" title="Permalink to this definition"></a></dt>
+<dd><p>Execute neural network initialization stage.
+Create network object and compile the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nn_topology</strong> – str topology name to be used</p></li>
+<li><p><strong>input_shape</strong> – tuple of three integers</p></li>
+<li><p><strong>optimizer</strong> – tf optimizer to be used for network compilation</p></li>
+<li><p><strong>loss_function</strong> – tf loss function to be used for network compilation</p></li>
+<li><p><strong>metrics</strong> – list of metrics to be measured for network</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>initialized network model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_nn_train">
+<span class="sig-name descname"><span class="pre">stage_nn_train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cnn_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.nn_library.network.Neural_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_nn_train" title="Permalink to this definition"></a></dt>
+<dd><p>Execute network training stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cnn_model</strong> – object of type src.nn_library.network.Neural_network</p></li>
+<li><p><strong>data</strong> – dict of test, train and validation data to be used in training</p></li>
+<li><p><strong>epochs</strong> – number of training iterations</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_nn_test">
+<span class="sig-name descname"><span class="pre">stage_nn_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cnn_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.nn_library.network.Neural_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_probability</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_nn_test" title="Permalink to this definition"></a></dt>
+<dd><p>Execute network testing stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cnn_model</strong> – object of type src.nn_library.network.Neural_network</p></li>
+<li><p><strong>data</strong> – dict of test, train and validation data to be used in training</p></li>
+<li><p><strong>plot_probability</strong> – bool to define if class probability heatmap should be displayed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_nn_save">
+<span class="sig-name descname"><span class="pre">stage_nn_save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cnn_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.nn_library.network.Neural_network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_nn_save" title="Permalink to this definition"></a></dt>
+<dd><p>Execute save network stage. Save network in given dir with given name in .pb format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_dir</strong> – str where network model will be saved in .pb format</p></li>
+<li><p><strong>network_name</strong> – str name of saved network</p></li>
+<li><p><strong>cnn_model</strong> – object of type src.nn_library.network.Neural_network</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="execution.base_executor.BaseExecutor.stage_run_sat_img_classifier">
+<span class="sig-name descname"><span class="pre">stage_run_sat_img_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sat_img_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#execution.base_executor.BaseExecutor.stage_run_sat_img_classifier" title="Permalink to this definition"></a></dt>
+<dd><p>Initialize SatelliteImageClassifier object and perform land use classification on given list
+of satellite images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sat_img_list</strong> – list of str names of satellite images to be used</p></li>
+<li><p><strong>network_name</strong> – str name of network to be used for land use classification on given sat image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kacper Murczkiewicz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

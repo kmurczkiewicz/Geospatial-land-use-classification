@@ -5,6 +5,7 @@ def TEST_TOPOLOGY(input_shape, num_of_classes):
     """
     Function that initializes ANN (Artificial Neural Network) model using TEST_TOPOLOGY.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
+
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: ANN model
@@ -22,6 +23,7 @@ def topology_A(input_shape, num_of_classes):
     """
     Function that initializes ANN (Artificial Neural Network) model using A topology.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
+
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: ANN model
@@ -41,6 +43,7 @@ def topology_A(input_shape, num_of_classes):
 def topology_B(input_shape, num_of_classes):
     """
     Function that initializes small CNN (Convolutional Neural Network) model using B topology.
+
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: CNN model
@@ -64,6 +67,7 @@ def topology_B(input_shape, num_of_classes):
 def topology_C(input_shape, num_of_classes):
     """
     Function that initializes CNN (Convolutional Neural Network) model using C topology.
+
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: CNN model
@@ -100,6 +104,7 @@ def topology_C(input_shape, num_of_classes):
 def topology_D(input_shape, num_of_classes):
     """
     Function that initializes CNN (Convolutional Neural Network) model using D topology.
+
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
     :return: CNN model

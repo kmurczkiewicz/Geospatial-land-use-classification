@@ -12,6 +12,7 @@ import src.helpers
 def analyze_data(paths, data_dict, display):
     """
     Function to analyze data distribution in each of train, test and val dataframe.
+
     :param paths: dict of app paths
     :param data_dict: dict of train, test, validation pandas data frames
     :param display: bool type, display output (images, plots etc.)
@@ -54,6 +55,7 @@ def analyze_data(paths, data_dict, display):
 def plot(paths, data_distribution, key):
     """
     Function to plot data distribution in dictionary.
+
     :param paths: dict of app paths
     :param data_distribution: dict of data distribution in test, train and val data frames
     :param key: str key to data_distribution
@@ -71,6 +73,7 @@ def plot(paths, data_distribution, key):
 def display_example(paths, data_dict, key):
     """
     Function to display 5x5 grid with images and their labels.
+
     :param paths: dict of app paths
     :param data_dict: dict of train, test, validation pandas data frames
     :param key: str key to data_dict
@@ -92,8 +95,8 @@ def display_values_distribution_values(data_distribution_values):
     """
     Function to display quantitative distribution of classes
     in test, train and validation data frames.
-    :param data_distribution_values: dict containing distribution details of test,
-    train and validation data frames.
+
+    :param data_distribution_values: dict containing distribution details of test, train and validation data frames.
     """
     sum_amount = 0
     for key, dict_value in data_distribution_values.items():
@@ -114,6 +117,7 @@ def analyze_saved_networks(paths):
     Function to analyze saved networks in base app dir. For each network,
     details .json file is loaded into pandas data frame and displayed. Networks
     are sorted in data frame descending by FTA (First Test Accuracy).
+
     :param paths: dict of app paths
     """
     NN_DETAILS_FILE = "network_details.json"
