@@ -3,6 +3,7 @@ import PIL
 import pathlib
 import re
 import IPython.display
+import matplotlib.pyplot
 
 import numpy as np
 import tensorflow as tf
@@ -30,17 +31,17 @@ class SatelliteImageClassifier:
         self.PATHS = paths
         self.network_name = network_name
         self.sat_images = sat_images
-        self.CLASS_COLORS = {
-            "AnnualCrop": "#FFAE00",
-            "Forest": "#1EFF1E",
-            "HerbaceousVegetation": "#8353DC",
-            "Highway": "#FF1EF1",
-            "Industrial": "#F50318",
-            "Pasture": "#A2F91D",
-            "PermanentCrop": "#DFD433",
-            "Residential": "#98A0A2",
-            "River": "#06BDF8",
-            "SeaLake": "#0648F8",
+        self.CLASSES = {
+            "AnnualCrop": {"color" : "#FFAE00", "mapped_amount" : 0},
+            "Forest": {"color" : "#1EFF1E", "mapped_amount" : 0},
+            "HerbaceousVegetation": {"color" : "#8353DC", "mapped_amount" : 0},
+            "Highway": {"color" : "#FF1EF1", "mapped_amount" : 0},
+            "Industrial": {"color" : "#F50318", "mapped_amount" : 0},
+            "Pasture": {"color" : "#A2F91D", "mapped_amount" : 0},
+            "PermanentCrop": {"color" : "#DFD433", "mapped_amount" : 0},
+            "Residential": {"color" : "#98A0A2", "mapped_amount" : 0},
+            "River": {"color" : "#06BDF8", "mapped_amount" : 0},
+            "SeaLake": {"color" : "#0648F8", "mapped_amount" : 0},
         }
 
     def _load_sat_image_as_array(self, sat_image):
@@ -108,8 +109,9 @@ class SatelliteImageClassifier:
                 list(self.PATHS["LABEL_MAP"].values()).index(predicted_class)
             ]
             single_mapped_tile = PIL.Image.new(
-                "RGB", (64, 64), PIL.ImageColor.getrgb(self.CLASS_COLORS[predicted_label])
+                "RGB", (64, 64), PIL.ImageColor.getrgb(self.CLASSES[predicted_label]["color"])
             )
+            self.CLASSES[predicted_label]["mapped_amount"] += 1
             single_mapped_tile.save(os.path.join(self.PATHS["SAT_MAP_TILES_PATH"], pathlib.Path(tile).stem + ".png"))
 
     def _generate_land_use_map(self, tiles_row_col, sat_img_name, original_img_arr):
@@ -176,14 +178,65 @@ class SatelliteImageClassifier:
         src.helpers.print_extensions.print_subtitle(f"3. Satellite image with applied land use mask - {sat_img_name}")
         IPython.display.display(original_sat_img)
 
+    def _reset_mapped_classes(self):
+        """
+        Function to reset mapped classes.
+        """
+        for key, value in self.CLASSES.items():
+            value["mapped_amount"] = 0
+
+    def _clear_tile_dirs(self):
+        """
+        Function to remove all tiles and mapped tiles, as for multiple sat images
+        empty tiles dirs are required.
+        """
+        for tile in os.listdir(self.PATHS["SAT_TILES_PATH"]):
+            os.remove(os.path.join(self.PATHS["SAT_TILES_PATH"], tile))
+
+        for mapped_tile in os.listdir(self.PATHS["SAT_MAP_TILES_PATH"]):
+            os.remove(os.path.join(self.PATHS["SAT_MAP_TILES_PATH"], mapped_tile))
+
+    def _set_bar_text_value(self, bar_plot, bar_value):
+        """
+        Function to display bar value above bar plot.
+
+        :param bar_plot: matplotlib.pyplot.bar object
+        :param bar_value: value to be displayed above bar
+        """
+        height = bar_plot.get_height()
+        matplotlib.pyplot.text(
+            bar_plot.get_x() + bar_plot.get_width() / 2., 1.02 * height, bar_value, ha='center', va='bottom', rotation=0
+        )
+
+    def _plot_class_distribution(self, sat_img):
+        """
+        Function to plot predicted classes distribution on given satellite image.
+
+        :param sat_image: str name of satellite image
+        """
+        src.helpers.print_extensions.print_subtitle(f"4. Predicted class distribution - {sat_img}")
+        x = [key for key, value in self.CLASSES.items() if value["mapped_amount"] > 0]
+        y = [value["mapped_amount"] for value in self.CLASSES.values() if value["mapped_amount"] > 0]
+        matplotlib.pyplot.figure(figsize=(10, 7))
+        bar_list = matplotlib.pyplot.bar(x, y)
+        matplotlib.pyplot.ylim(ymax=max(y)+(max(y)/10), ymin=0)
+        for index, class_name in enumerate(x):
+            self._set_bar_text_value(bar_list[index], y[index])
+            bar_list[index].set_color(self.CLASSES[class_name]["color"])
+        matplotlib.pyplot.xlabel('Class')
+        matplotlib.pyplot.ylabel(f'Amount on {sat_img}')
+        matplotlib.pyplot.show()
+
     def run_classification(self):
         """
         Function to run classification process on given sat images. For each image, land use mask is generated
         using provided CNN model. Further, land use mask is applied to source image.
         """
         for sat_img in self.sat_images:
+            self._clear_tile_dirs()
             sat_img_array = self._load_sat_image_as_array(sat_img)
             tiles_row_col = self._split_sat_image_to_tiles(sat_img_array)
             self._predict_land_use()
             self._generate_land_use_map(tiles_row_col, sat_img, sat_img_array)
-            # TBD: Generate legend with class names and class colors
+            self._plot_class_distribution(sat_img)
+            self._reset_mapped_classes()

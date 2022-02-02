@@ -35,7 +35,16 @@ extensions = [
 ]
 
 autoapi_dirs = ['../src']
-
+autoapi_options = [
+    'members',
+    'undoc-members',
+    'private-members',
+    'show-inheritance',
+    'show-module-summary',
+    'special-members',
+    'imported-members',
+    'show-inheritance-diagram'
+]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

@@ -20,10 +20,10 @@ def analyze_data(paths, data_dict, display):
     src.helpers.print_extensions.print_variable("LABEL_MAP:")
     src.helpers.print_extensions.print_dict(paths["LABEL_MAP"])
     print("\n\n")
-    src.helpers.print_extensions.print_subtitle("2. Data distribution ")
+    src.helpers.print_extensions.print_subtitle("Data distribution ")
     
     data_distribution = {
-        "train_data_frame": {key: 0 for key, _ in paths["LABEL_MAP"].items()},
+        "train_data_frame": {key : 0 for key, _ in paths["LABEL_MAP"].items()},
         "test_data_frame" : {key : 0 for key, _ in paths["LABEL_MAP"].items()},
         "val_data_frame"  : {key : 0 for key, _ in paths["LABEL_MAP"].items()}
     }
@@ -44,8 +44,13 @@ def analyze_data(paths, data_dict, display):
             }
         if not display:
             continue
-        src.helpers.print_extensions.print_variable(key)
-        display_values_distribution_values(distribution_values)
+
+        sum_amount = sum(dict_value["amount"] for dict_value in distribution_values.values())
+        src.helpers.print_extensions.print_variable(str(key + " - " + str(sum_amount) + " images"))
+        for class_name, dict_value in distribution_values.items():
+            percent_of_all = "{:.2f}".format((dict_value['amount'] / sum_amount) * 100)
+            print(f"{class_name} - {percent_of_all}%")
+        # display_values_distribution_values(distribution_values)
         plot(paths, data_distribution, key)
         display_example(paths, data_dict, key)
         print("\n")
@@ -60,13 +65,17 @@ def plot(paths, data_distribution, key):
     :param data_distribution: dict of data distribution in test, train and val data frames
     :param key: str key to data_distribution
     """
-    x = [paths["LABEL_MAP"][key] for key in data_distribution[key].keys()]
+    x = [f"{key} [{paths['LABEL_MAP'][key]}]" for key in data_distribution[key].keys()]
     y = data_distribution[key].values()
-    new_colors = ["red", "green", "blue", "yellow", "brown", "pink", "orange", "purple", "cyan"]
-    matplotlib.pyplot.bar(x, y, color=new_colors)
-    matplotlib.pyplot.xlabel('Class label')
-    matplotlib.pyplot.ylabel('Amount in dataframe')
-    matplotlib.pyplot.xticks(x)
+    new_colors = ["red", "yellow", "orange", "green", "cyan", "blue", "purple", "magenta", "lime", "brown"]
+    matplotlib.pyplot.figure(figsize=(10, 4.8))
+    matplotlib.pyplot.barh(x, y, color=new_colors)
+    matplotlib.pyplot.xlabel(f'Amount in {key}')
+    matplotlib.pyplot.ylabel('Class')
+    matplotlib.pyplot.yticks(x)
+    # matplotlib.pyplot.xticks(x)
+    for index, value in enumerate(y):
+        matplotlib.pyplot.text(value, index, str(value))
     matplotlib.pyplot.show()
 
 
