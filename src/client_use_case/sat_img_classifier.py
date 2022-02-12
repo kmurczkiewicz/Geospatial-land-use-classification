@@ -4,23 +4,12 @@ import pathlib
 import re
 import IPython.display
 import matplotlib.pyplot
+import natsort
 
 import numpy as np
 import tensorflow as tf
 
 import src.helpers.print_extensions
-
-
-def _natural_sort(list_to_sort):
-    """
-    Function to perform natural sort on given list.
-
-    :param list_to_sort: list to be sorted using natural sort algorithm
-    :return: list sorted in natural sort order
-    """
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-    return sorted(list_to_sort, key=alphanum_key)
 
 
 class SatelliteImageClassifier:
@@ -34,7 +23,7 @@ class SatelliteImageClassifier:
         self.CLASSES = {
             "AnnualCrop": {"color" : "#FFAE00", "mapped_amount" : 0},
             "Forest": {"color" : "#1EFF1E", "mapped_amount" : 0},
-            "HerbaceousVegetation": {"color" : "#8353DC", "mapped_amount" : 0},
+            "HerbaceousVegetation": {"color" : "#79E0A8", "mapped_amount" : 0},
             "Highway": {"color" : "#FF1EF1", "mapped_amount" : 0},
             "Industrial": {"color" : "#F50318", "mapped_amount" : 0},
             "Pasture": {"color" : "#A2F91D", "mapped_amount" : 0},
@@ -98,7 +87,7 @@ class SatelliteImageClassifier:
         network.model = tf.keras.models.load_model(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], self.network_name))
 
         tile_list = os.listdir(self.PATHS["SAT_TILES_PATH"])
-        tile_list = _natural_sort(tile_list)
+        tile_list = natsort.natsorted(tile_list)
 
         for tile in tile_list:
             tile_img = PIL.Image.open(os.path.join(self.PATHS["SAT_TILES_PATH"], tile))
@@ -125,8 +114,7 @@ class SatelliteImageClassifier:
         :param original_img_arr: numpy array representing original sat image
         """
         mapped_tile_list = os.listdir(self.PATHS["SAT_MAP_TILES_PATH"])
-        mapped_tile_list = _natural_sort(mapped_tile_list)
-
+        mapped_tile_list = natsort.natsorted(mapped_tile_list)
         single_row = PIL.Image.new('RGBA', (tiles_row_col["tiles_in_row"] * 64, 64))
 
         tile_num = 0
@@ -171,10 +159,10 @@ class SatelliteImageClassifier:
 
         original_sat_img.paste(mapped_image, (0, 0), mapped_image)
 
-        print("\n\n")
+        print("\n")
         src.helpers.print_extensions.print_subtitle(f"2. Land use classification mask - {sat_img_name}")
         IPython.display.display(mapped_image)
-        print("\n\n")
+        print("\n")
         src.helpers.print_extensions.print_subtitle(f"3. Satellite image with applied land use mask - {sat_img_name}")
         IPython.display.display(original_sat_img)
 
@@ -182,6 +170,7 @@ class SatelliteImageClassifier:
         """
         Function to reset mapped classes.
         """
+        print("\n\n\n")
         for key, value in self.CLASSES.items():
             value["mapped_amount"] = 0
 
@@ -214,10 +203,11 @@ class SatelliteImageClassifier:
 
         :param sat_image: str name of satellite image
         """
+        print("\n")
         src.helpers.print_extensions.print_subtitle(f"4. Predicted class distribution - {sat_img}")
         x = [key for key, value in self.CLASSES.items() if value["mapped_amount"] > 0]
         y = [value["mapped_amount"] for value in self.CLASSES.values() if value["mapped_amount"] > 0]
-        matplotlib.pyplot.figure(figsize=(10, 7))
+        matplotlib.pyplot.figure(figsize=(16, 7))
         bar_list = matplotlib.pyplot.bar(x, y)
         matplotlib.pyplot.ylim(ymax=max(y)+(max(y)/10), ymin=0)
         for index, class_name in enumerate(x):

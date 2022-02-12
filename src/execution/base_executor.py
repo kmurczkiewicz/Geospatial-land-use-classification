@@ -15,6 +15,7 @@ import src.data.analyze
 import src.data.load
 import src.data.prepare
 
+import src.nn_library.network_analyzer
 import src.nn_library.network
 import src.nn_library.topologies
 
@@ -146,6 +147,23 @@ class BaseExecutor:
         src.data.analyze.analyze_saved_networks(self.PATHS)
         timer.stop_timer()
 
+    def stage_analyze_given_network(self, network_name, layer_num, image_path):
+        """
+        Function to analyze given network model. For given model filters shapes, filters
+        sample for given layer and feature maps for each conv2d layer are displayed.
+
+        :param network_name: str network name to be analyzed
+        :param layer_num: int number of layer to be analyzed
+        :param image_path: str path to image to analyze kernels and feature map
+        """
+        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Analyze {network_name}")
+        nn_analyzer = src.nn_library.network_analyzer.NetworkAnalyzer(
+            network_path=os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name),
+            layer_num=layer_num,
+            img_path=os.path.join(self.PATHS["DATASET"], image_path)
+        )
+        nn_analyzer.full_analysis()
+
     def stage_nn_init(
             self,
             nn_topology,
@@ -227,9 +245,12 @@ class BaseExecutor:
         :param sat_img_list: list of str names of satellite images to be used
         :param network_name: str name of network to be used for land use classification on given sat image
         """
+        timer = src.helpers.timer.Timer()
+        timer.set_timer()
         sat_img_classifier = src.client_use_case.sat_img_classifier.SatelliteImageClassifier(
             self.PATHS,
             network_name,
             sat_img_list
         )
         sat_img_classifier.run_classification()
+        timer.stop_timer()

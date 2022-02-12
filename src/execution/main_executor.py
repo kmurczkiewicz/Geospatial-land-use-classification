@@ -74,6 +74,16 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         """
         self.stage_analyze_saved_networks()
 
+    def execute_analyze_single_network(self, network_name, layer_num, image_path):
+        """
+        Execute analyze given network stage.
+
+        :param network_name: str network name to be analyzed
+        :param layer_num: int number of layer to be analyzed
+        :param image_path: str path to image to analyze kernels and feature map
+        """
+        self.stage_analyze_given_network(network_name, layer_num, image_path)
+
     def execute_land_use_classification_use_case(self, sat_img_list, network_name):
         """
         Execute land use classification use case stage. Load satellite image, split it into tiles
