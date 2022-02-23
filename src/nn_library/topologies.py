@@ -74,8 +74,8 @@ def topology_C(input_shape, num_of_classes):
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2)))
     # Without dropout, over-fitting is present
-    cnn_model.add(layers.Flatten())
     cnn_model.add(layers.Dropout(0.3))
+    cnn_model.add(layers.Flatten())
     cnn_model.add(layers.Dense(num_of_classes, activation='softmax'))
     cnn_model.summary()
 

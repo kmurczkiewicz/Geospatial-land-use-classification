@@ -98,3 +98,27 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
             network_name
         )
 
+    def execute_nn_hyper_parameters_tuning(
+            self,
+            overwrite,
+            max_trials,
+            executions_per_trial,
+            n_epoch_search
+    ):
+        """
+        Execute neural network hyper parameters tuning stage.
+
+        :param overwrite: bool, overwrite existing tuner
+        :param max_trials: int, num of max trials for tuning
+        :param executions_per_trial: int, num of executions per trial
+        :param n_epoch_search: int, num of epochs to perform search
+        """
+        data_dict = self.stage_prepare_data(read_head=False)
+        data = self.stage_load_data(data_dict)
+        self.stage_hyper_parameters_tuning(
+            data,
+            overwrite,
+            max_trials,
+            executions_per_trial,
+            n_epoch_search,
+        )

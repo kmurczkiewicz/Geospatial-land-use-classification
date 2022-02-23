@@ -15,8 +15,10 @@ import src.data.analyze
 import src.data.load
 import src.data.prepare
 
-import src.nn_library.network_analyzer
 import src.nn_library.network
+import src.nn_library.network_analyzer
+import src.nn_library.network_hyper_model
+import src.nn_library.network_tuner
 import src.nn_library.topologies
 
 import src.client_use_case.sat_img_classifier
@@ -254,3 +256,36 @@ class BaseExecutor:
         )
         sat_img_classifier.run_classification()
         timer.stop_timer()
+
+    def stage_hyper_parameters_tuning(
+            self,
+            data,
+            overwrite,
+            max_trials,
+            executions_per_trial,
+            n_epoch_search,
+    ):
+        """
+        Initialize CNN Keras Hyper model and NetworkTuner object. Perform hyper params tuning with given
+        execution params.
+
+        :param data: dict of test, train and validation data to be used in training
+        :param overwrite: bool, overwrite existing tuner
+        :param max_trials: int, num of max trials for tuning
+        :param executions_per_trial: int, num of executions per trial
+        :param n_epoch_search: int, num of epochs to perform search
+        """
+        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Search for best hyper parameters")
+        hyper_model = src.nn_library.network_hyper_model.NetworkHyperModel()
+        network_tuner = src.nn_library.network_tuner.NetworkTuner(
+            max_trials=max_trials,
+            executions_per_trial=executions_per_trial,
+            n_epoch_search=n_epoch_search,
+            hyper_model=hyper_model
+        )
+        network_tuner.initialize_tuner(overwrite)
+        network_tuner.hyper_params_search(data)
+        network_tuner.save_best_model(self.PATHS["NETWORK_SAVE_DIR"], data)
+
+
+
