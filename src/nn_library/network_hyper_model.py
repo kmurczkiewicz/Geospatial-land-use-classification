@@ -20,6 +20,7 @@ class NetworkHyperModel(HyperModel):
         self.optimizer = keras.optimizers.Adam
         self.loss_function = "sparse_categorical_crossentropy"
 
+
     def fit(self, hp, model, *args, **kwargs):
         return model.fit(
             *args,
@@ -58,7 +59,7 @@ class NetworkHyperModel(HyperModel):
         # Dropout layer
         model.add(
             Dropout(rate=hp.Float(
-                'dropout_2',
+                'dropout',
                 min_value=0.0,
                 max_value=0.5,
                 default=0.25,
@@ -77,7 +78,7 @@ class NetworkHyperModel(HyperModel):
             optimizer=self.optimizer(
                 hp.Float(
                     'learning_rate',
-                    min_value=1e-4,
+                    min_value=4e-4,
                     max_value=1e-2,
                     sampling='LOG',
                     default=1e-3

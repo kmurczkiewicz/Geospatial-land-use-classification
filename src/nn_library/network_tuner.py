@@ -17,8 +17,9 @@ class NetworkTuner:
         self.max_trials = max_trials
         self.executions_per_trial = executions_per_trial
         self.hyper_model = hyper_model
-        self.tuner = None
         self.n_epoch_search = n_epoch_search
+
+        self.tuner = None
 
     def initialize_tuner(self, overwrite):
         self.tuner = RandomSearch(
@@ -69,4 +70,8 @@ class NetworkTuner:
 
         # Save hyper parameters tuning logs
         with open(os.path.join(model_save_dir, "hyper_parameters_tuning.txt"), 'w') as file:
-            file.write(self.tuner.results_summary())
+            # Adjust to network_hyper_model
+            best_hyper_params = f"learning_rate : {self.tuner.get_best_hyperparameters()[0].get('learning_rate')}\n"\
+                                f"batch_size : {self.tuner.get_best_hyperparameters()[0].get('batch_size')}\n"\
+                                f"dropout : {self.tuner.get_best_hyperparameters()[0].get('dropout')}\n"
+            file.write(best_hyper_params)

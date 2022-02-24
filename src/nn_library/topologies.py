@@ -96,28 +96,35 @@ def topology_D(input_shape, num_of_classes):
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=input_shape))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 2
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 3
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 4
     cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation='relu'))
     cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation='relu'))
+    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Top
     cnn_model.add(layers.Flatten())
-    cnn_model.add(layers.Dropout(0.4))
-    cnn_model.add(layers.Dense(512, activation='relu'))
+    cnn_model.add(layers.Dropout(0.3))
+    cnn_model.add(layers.Dense(1024, activation='relu'))
+    cnn_model.add(layers.Dropout(0.3))
+    cnn_model.add(layers.Dense(1024, activation='relu'))
+    cnn_model.add(layers.Dropout(0.3))
     cnn_model.add(layers.Dense(num_of_classes, activation='softmax'))
     cnn_model.summary()
 
