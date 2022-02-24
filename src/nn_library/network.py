@@ -66,6 +66,7 @@ class Neural_network:
             mode='max',
             save_best_only=True
         )
+        early_stopping_callback = tf.keras.callbacks.EarlyStopping('val_loss', patience=5)
         # Train the model
         self.training_history = self.model.fit(
             data["X_train"],
@@ -75,7 +76,7 @@ class Neural_network:
             batch_size=128,
             shuffle=True,
             verbose=1,
-            callbacks=[model_checkpoint_callback]
+            callbacks=[model_checkpoint_callback, early_stopping_callback]
         )
         # Load best weights into the model
         self.model.load_weights(checkpoint_filepath)
@@ -180,7 +181,7 @@ class Neural_network:
         """
         date_time = datetime.datetime.now()
         model_name = f"{name}_{date_time.strftime('%H%M%d%m%y')}"
-        model_save_dir = f"{directory}\\{model_name}"
+        model_save_dir = os.path.join(directory, model_name)
         model_details = {
             "network_name" : model_name,
             "FTA"          : self.FTA,

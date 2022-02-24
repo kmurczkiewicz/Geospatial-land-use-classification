@@ -66,3 +66,7 @@ class NetworkTuner:
         # Save .json network descriptor
         with open(os.path.join(model_save_dir, "network_details.json"), 'w') as file:
             json.dump(model_details, file)
+
+        # Save hyper parameters tuning logs
+        with open(os.path.join(model_save_dir, "hyper_parameters_tuning.txt"), 'w') as file:
+            file.write(self.tuner.results_summary())
