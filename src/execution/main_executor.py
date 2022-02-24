@@ -24,7 +24,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         data_dict = self.stage_prepare_data(read_head=False)
         self.stage_analyze_data(data_dict, self.display)
 
-    def execute_full_flow(self, topology, epochs, optimizer, loss_function, metrics, save_model, plot_probability=True):
+    def execute_full_flow(self, topology, epochs, optimizer, loss_function, metrics, save_model, batch_size, plot_probability=True):
         """
         Execute all stages. Prepare load train, test and validation data into memory,
         initialize convolutional neural network with given topology, train and test the network.
@@ -37,6 +37,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         :param metrics: list of metrics to be measured for network
         :param save_model: bool defining if output model should be saved
         :param plot_probability: bool to define if class probability heatmap should be displayed
+        :param batch_size: batch size
         """
         data_dict = self.stage_prepare_data(read_head=False)
         data = self.stage_load_data(data_dict)
@@ -47,7 +48,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
             loss_function=loss_function,
             metrics=metrics
         )
-        self.stage_nn_train(cnn_model, data, epochs)
+        self.stage_nn_train(cnn_model, data, epochs, batch_size)
         self.stage_nn_test(cnn_model, data, plot_probability)
         if not save_model:
             return

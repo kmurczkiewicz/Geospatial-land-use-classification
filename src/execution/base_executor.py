@@ -195,18 +195,19 @@ class BaseExecutor:
         src.helpers.print_extensions.print_border()
         return cnn_model
 
-    def stage_nn_train(self, cnn_model: src.nn_library.network.Neural_network, data, epochs):
+    def stage_nn_train(self, cnn_model: src.nn_library.network.Neural_network, data, epochs, batch_size):
         """
         Execute network training stage.
 
         :param cnn_model: object of type src.nn_library.network.Neural_network
         :param data: dict of test, train and validation data to be used in training
         :param epochs: number of training iterations
+        :param batch_size: batch size
         """
         timer = src.helpers.timer.Timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Train the model")
         timer.set_timer()
-        cnn_model.train_cnn_model(data, epochs, self.PATHS["MODEL_CHECKPOINT_PATH"])
+        cnn_model.train_cnn_model(data, epochs, self.PATHS["MODEL_CHECKPOINT_PATH"], batch_size)
         timer.stop_timer()
         cnn_model.plot_model_result("accuracy", 0)
         cnn_model.plot_model_result("loss", 1)

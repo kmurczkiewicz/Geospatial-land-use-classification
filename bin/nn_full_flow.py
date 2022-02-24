@@ -7,6 +7,7 @@ def main():
     executor.execute_full_flow(
         topology     = "D",
         epochs       = 10,
+        batch_size   = 128,
         optimizer    = tf.keras.optimizers.Adam(learning_rate=1e-4),
         loss_function= tf.keras.losses.SparseCategoricalCrossentropy(),
         metrics      = ['accuracy'],

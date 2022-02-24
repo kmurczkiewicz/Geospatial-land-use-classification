@@ -51,13 +51,14 @@ class Neural_network:
         self.optimizer = optimizer
         self.model.compile(optimizer, loss_function, metrics)
 
-    def train_cnn_model(self, data: dict, epochs_num: int, checkpoint_filepath):
+    def train_cnn_model(self, data: dict, epochs_num: int, checkpoint_filepath, batch_size):
         """
         Function to train network using given params.
 
         :param data: dict of test, train and validation data to be used in training
         :param epochs_num: number of training iterations
         :param checkpoint_filepath: str path to model checkpoint object
+        :param batch_size: batch size
         """
         # Define checkpoint to obtain best model weights from training
         model_checkpoint_callback  = tf.keras.callbacks.ModelCheckpoint(
@@ -73,7 +74,7 @@ class Neural_network:
             data["y_train"],
             epochs=epochs_num,
             validation_data=(data["X_val"], data["y_val"]),
-            batch_size=128,
+            batch_size=batch_size,
             shuffle=True,
             verbose=1,
             callbacks=[model_checkpoint_callback, early_stopping_callback]
