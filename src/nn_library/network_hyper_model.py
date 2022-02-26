@@ -1,13 +1,8 @@
 from kerastuner import HyperModel
 
 from tensorflow import keras
-from tensorflow.keras.layers import (
-    Conv2D,
-    Dense,
-    Dropout,
-    Flatten,
-    MaxPooling2D
-)
+from tensorflow.keras import layers
+
 
 class NetworkHyperModel(HyperModel):
     """
@@ -23,8 +18,7 @@ class NetworkHyperModel(HyperModel):
     def fit(self, hp, model, *args, **kwargs):
         return model.fit(
             *args,
-            # batch_size=hp.Choice("batch_size", [32, 64, 128, 256]),
-            batch_size=hp.Choice("batch_size", [32]),
+            batch_size=hp.Choice("batch_size", [32, 64, 128, 256]),
             **kwargs,
     )
 
@@ -32,45 +26,120 @@ class NetworkHyperModel(HyperModel):
         model = keras.Sequential()
 
         # Block 1
+        model.add(layers.InputLayer(input_shape=self.input_shape))
+
         model.add(
-            Conv2D(
+            layers.Conv2D(
                 filters=32,
                 kernel_size=(3,3),
                 padding='same',
                 activation='relu',
-                input_shape=self.input_shape
             )
         )
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(
+            layers.Conv2D(
+                filters=32,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(
+            layers.Conv2D(
+                filters=32,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(layers.SpatialDropout2D(0.2))
+        model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         # Block 2
         model.add(
-            Conv2D(
+            layers.Conv2D(
                 filters=64,
                 kernel_size=(3,3),
                 padding='same',
                 activation='relu',
-                input_shape=self.input_shape
             )
         )
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-
-        # Dropout layer
         model.add(
-            Dropout(rate=hp.Float(
+            layers.Conv2D(
+                filters=64,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(layers.SpatialDropout2D(0.2))
+        model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+        # Block 3
+        model.add(
+            layers.Conv2D(
+                filters=128,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(
+            layers.Conv2D(
+                filters=128,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(
+            layers.Conv2D(
+                filters=128,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(layers.SpatialDropout2D(0.2))
+        model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+        # Block 4
+        model.add(
+            layers.Conv2D(
+                filters=256,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(
+            layers.Conv2D(
+                filters=256,
+                kernel_size=(3,3),
+                padding='same',
+                activation='relu',
+            )
+        )
+        model.add(layers.SpatialDropout2D(0.2))
+        model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
+
+        # Flatten and dropout layers
+        model.add(layers.Flatten())
+        model.add(
+            layers.Dropout(rate=hp.Float(
                 'dropout',
                 min_value=0.0,
                 max_value=0.5,
-                default=0.25,
+                default=0.3,
                 step=0.05,
             ))
         )
-
-        # Flatten layer
-        model.add(Flatten())
-
         # Fully connected output layer
-        model.add(Dense(self.num_classes, activation='softmax'))
+        model.add(layers.Dense(
+            units=hp.Choice("dense_units_1", [256, 512, 1024, 2048]),
+            activation='relu')
+        )
+        model.add(layers.Dense(self.num_classes, activation='softmax'))
 
         # Compile the model
         model.compile(
@@ -80,11 +149,10 @@ class NetworkHyperModel(HyperModel):
                     min_value=4e-4,
                     max_value=1e-2,
                     sampling='LOG',
-                    default=1e-3
+                    default=3e-4
                 )
             ),
             loss=self.loss_function,
             metrics=['accuracy']
         )
         return model
-

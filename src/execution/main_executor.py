@@ -106,7 +106,8 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
             overwrite,
             max_trials,
             executions_per_trial,
-            n_epoch_search
+            n_epoch_search,
+            save_model
     ):
         """
         Execute neural network hyper parameters tuning stage.
@@ -115,6 +116,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         :param max_trials: int, num of max trials for tuning
         :param executions_per_trial: int, num of executions per trial
         :param n_epoch_search: int, num of epochs to perform search
+        :param save_model: bool, if output nn model shall be saved
         """
         data_dict = self.stage_prepare_data(read_head=False)
         data = self.stage_load_data(data_dict)
@@ -124,4 +126,5 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
             max_trials,
             executions_per_trial,
             n_epoch_search,
+            save_model
         )

@@ -6,12 +6,13 @@ def main():
     executor = src.execution.main_executor.MainExecutor(display=True)
     executor.execute_full_flow(
         topology     = "D",
-        epochs       = 10,
-        batch_size   = 128,
-        optimizer    = tf.keras.optimizers.Adam(learning_rate=1e-4),
+        epochs       = 5,
+        optimizer    = tf.keras.optimizers.Adam(learning_rate=3e-4),
         loss_function= tf.keras.losses.SparseCategoricalCrossentropy(),
+        batch_size   = 128,
         metrics      = ['accuracy'],
-        save_model   = True
+        layer_activation_function='relu',
+        save_model   = False
     )
 
 if __name__ == "__main__" :

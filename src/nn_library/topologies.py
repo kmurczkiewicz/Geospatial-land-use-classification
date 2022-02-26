@@ -87,7 +87,7 @@ def topology_C(input_shape, num_of_classes, layer_activation_function):
     return cnn_model
 
 
-def topology_D(input_shape, num_of_classes):
+def topology_D(input_shape, num_of_classes, layer_activation_function):
     """
     Function that initializes Deep CNN (Convolutional Neural Network) model using D topology.
 
@@ -100,7 +100,7 @@ def topology_D(input_shape, num_of_classes):
 
     # Block 1
     cnn_model.add(layers.InputLayer(input_shape=input_shape))
-    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function, input_shape=input_shape))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.SpatialDropout2D(0.2))
