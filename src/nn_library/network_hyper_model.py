@@ -20,7 +20,6 @@ class NetworkHyperModel(HyperModel):
         self.optimizer = keras.optimizers.Adam
         self.loss_function = "sparse_categorical_crossentropy"
 
-
     def fit(self, hp, model, *args, **kwargs):
         return model.fit(
             *args,

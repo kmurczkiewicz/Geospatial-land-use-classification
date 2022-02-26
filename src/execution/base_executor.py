@@ -172,6 +172,7 @@ class BaseExecutor:
             input_shape,
             optimizer,
             loss_function,
+            layer_activation_function,
             metrics,
     ):
         """
@@ -183,13 +184,14 @@ class BaseExecutor:
         :param optimizer: tf optimizer to be used for network compilation
         :param loss_function: tf loss function to be used for network compilation
         :param metrics: list of metrics to be measured for network
+        :param layer_activation_function: str name of nn layer activation function
         :return: initialized network model
         """
         timer = src.helpers.timer.Timer()
         timer.set_timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Create and compile the model")
         cnn_model = src.nn_library.network.Neural_network(nn_topology, input_shape)
-        cnn_model.init_network()
+        cnn_model.init_network(layer_activation_function)
         cnn_model.compile(optimizer, loss_function, metrics)
         timer.stop_timer()
         src.helpers.print_extensions.print_border()

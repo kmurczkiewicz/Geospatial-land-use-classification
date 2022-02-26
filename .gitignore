@@ -12,3 +12,4 @@ geo_sat_nn_app.egg-info
 .idea/
 .coverage
 htmlcov
+dev_env/

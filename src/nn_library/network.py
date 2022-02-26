@@ -107,13 +107,16 @@ class Neural_network:
         )
         return test_acc
 
-    def init_network(self):
+    def init_network(self, layer_activation_function):
         """
         Function to initialize network object topology.
+
+        :param layer_activation_function: str name of nn layer activation function
         """
         self.model = self.topology(
             self.input_shape,
-            self.num_of_classes
+            self.num_of_classes,
+            layer_activation_function
         )
 
     def plot_test_confusion_matrix(self, y_true, y_predicted, class_labels):
