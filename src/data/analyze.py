@@ -121,6 +121,12 @@ def display_values_distribution_values(data_distribution_values):
         )
 
 def _get_network_details(network_path):
+    """
+    Function to read network .json descriptor into pandas dataframe object.
+
+    :param network_path: str path to network
+    :return: pandas dataframe object
+    """
     return pd.read_json(
         network_path,
         lines=True

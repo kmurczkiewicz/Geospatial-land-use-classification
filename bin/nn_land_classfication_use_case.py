@@ -9,9 +9,9 @@ def main():
     executor.execute_land_use_classification_use_case(
         network_name="network_D_2142310122",
         sat_img_list=[
-            # "elblag.jpg"
+            "elblag.jpg"
             "france.jpg",
-            # "usa_florida.jpg",
+            "usa_florida.jpg",
             "mexico.jpg"
         ]
     )

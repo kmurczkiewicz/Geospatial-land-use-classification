@@ -16,6 +16,15 @@ class NetworkHyperModel(HyperModel):
         self.loss_function = "sparse_categorical_crossentropy"
 
     def fit(self, hp, model, *args, **kwargs):
+        """
+        Function to overwrite tensorflow fit function.
+
+        :param hp: HyperParameters object
+        :param model: tensorflow model object
+        :param args: *args
+        :param kwargs: **kwargs
+        :return: overwritten tensorflow model.fit function
+        """
         return model.fit(
             *args,
             batch_size=hp.Choice("batch_size", [32, 64, 128, 256]),
@@ -23,6 +32,14 @@ class NetworkHyperModel(HyperModel):
     )
 
     def build(self, hp):
+        """
+        Function to define keras hyper model, a model which hyper-parameters
+        are defined by ex. list of variables. Which are further used in
+        hyper-parameters tuning stage.
+
+        :param hp: HyperParameters object
+        :return: HyperModel object
+        """
         model = keras.Sequential()
 
         # Block 1
