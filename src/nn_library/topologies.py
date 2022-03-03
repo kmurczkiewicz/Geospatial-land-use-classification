@@ -87,7 +87,7 @@ def topology_C(input_shape, num_of_classes, layer_activation_function):
     return cnn_model
 
 
-def topology_D(input_shape, num_of_classes):
+def topology_D(input_shape, num_of_classes, layer_activation_function):
     """
     Function that initializes Deep CNN (Convolutional Neural Network) model using D topology.
 
@@ -100,34 +100,32 @@ def topology_D(input_shape, num_of_classes):
 
     # Block 1
     cnn_model.add(layers.InputLayer(input_shape=input_shape))
-    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function, input_shape=input_shape))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
-    cnn_model.add(layers.SpatialDropout2D(0.2))
+    cnn_model.add(layers.Conv2D(32, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 2
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(64, (3, 3), padding='same', activation=layer_activation_function))
-    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 3
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(128, (3, 3), padding='same', activation=layer_activation_function))
-    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Block 4
     cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation=layer_activation_function))
     cnn_model.add(layers.Conv2D(256, (3, 3), padding='same', activation=layer_activation_function))
-    cnn_model.add(layers.SpatialDropout2D(0.2))
     cnn_model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Fully connected top
     cnn_model.add(layers.Flatten())
-    cnn_model.add(layers.Dropout(0.3))
+    # dropout
+    cnn_model.add(layers.Dropout(0.45))
+    # dense_units_1
     cnn_model.add(layers.Dense(512, activation=layer_activation_function))
     cnn_model.add(layers.Dense(num_of_classes, activation='softmax'))
     cnn_model.summary()

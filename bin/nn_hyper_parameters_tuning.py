@@ -8,7 +8,8 @@ def main():
         overwrite=True,
         max_trials=1,
         executions_per_trial=1,
-        n_epoch_search=1
+        n_epoch_search=1,
+        save_model=True
     )
 
 if __name__ == "__main__" :

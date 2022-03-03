@@ -267,6 +267,7 @@ class BaseExecutor:
             max_trials,
             executions_per_trial,
             n_epoch_search,
+            save_model
     ):
         """
         Initialize CNN Keras Hyper model and NetworkTuner object. Perform hyper params tuning with given
@@ -277,6 +278,7 @@ class BaseExecutor:
         :param max_trials: int, num of max trials for tuning
         :param executions_per_trial: int, num of executions per trial
         :param n_epoch_search: int, num of epochs to perform search
+        :param save_model: bool, if output nn model shall be saved
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Search for best hyper parameters")
         hyper_model = src.nn_library.network_hyper_model.NetworkHyperModel()
@@ -287,8 +289,10 @@ class BaseExecutor:
             hyper_model=hyper_model
         )
         network_tuner.initialize_tuner(overwrite)
-        network_tuner.hyper_params_search(data)
-        network_tuner.save_best_model(self.PATHS["NETWORK_SAVE_DIR"], data)
+        loss, accuracy = network_tuner.hyper_params_search(data)
+        if not save_model:
+            return
+        network_tuner.save_best_model(self.PATHS["NETWORK_SAVE_DIR"], loss, accuracy)
 
 
 

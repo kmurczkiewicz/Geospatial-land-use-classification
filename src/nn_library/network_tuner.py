@@ -43,11 +43,12 @@ class NetworkTuner:
             callbacks=[tf.keras.callbacks.EarlyStopping('val_loss', patience=5)]
         )
         self.tuner.results_summary()
-
-    def save_best_model(self, directory, data):
         best_model = self.tuner.get_best_models(num_models=1)[0]
         loss, accuracy = best_model.evaluate(data["X_test"], data["y_test"])
+        return loss, accuracy
 
+    def save_best_model(self, directory, loss, accuracy):
+        best_model = self.tuner.get_best_models(num_models=1)[0]
         date_time = datetime.datetime.now()
         model_name = f"CNN_HyperModel_{date_time.strftime('%H%M%d%m%y')}"
         model_save_dir = f"{directory}\\{model_name}"

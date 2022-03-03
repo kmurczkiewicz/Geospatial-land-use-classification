@@ -30,6 +30,7 @@ class Neural_network:
 
         self.optimizer = None
         self.loss_function = None
+        self.layer_activation_function = None
 
         self.model = None
         self.training_history = None
@@ -113,10 +114,11 @@ class Neural_network:
 
         :param layer_activation_function: str name of nn layer activation function
         """
+        self.layer_activation_function = layer_activation_function
         self.model = self.topology(
             self.input_shape,
             self.num_of_classes,
-            layer_activation_function
+            self.layer_activation_function
         )
 
     def plot_test_confusion_matrix(self, y_true, y_predicted, class_labels):
@@ -193,6 +195,7 @@ class Neural_network:
             "topology"     : self.topology.__name__,
             "optimizer"    : type(self.optimizer).__name__,
             "loss_function": type(self.loss_function).__name__,
+            "activation"   : self.layer_activation_function,
             "created"      : date_time.strftime("%H:%M:%S, %d/%m/%Y"),
         }
         # Save network model
