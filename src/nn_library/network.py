@@ -166,10 +166,10 @@ class Neural_network:
         matplotlib.pyplot.ylim(
             [
                 min(self.training_history.history[mode]),
-                max(self.training_history.history[mode])
+                max(self.training_history.history[mode]) + ((max(self.training_history.history[mode])*5)/100)
             ]
         )
-        matplotlib.pyplot.legend(loc='lower right')
+        matplotlib.pyplot.legend(loc='best')
         display(matplotlib.pyplot.figure(num=figure_num))
         if figure_num == 0:
             self.training_history_plots["acc"] = matplotlib.pyplot.figure(figure_num)

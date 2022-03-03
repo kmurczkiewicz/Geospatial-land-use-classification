@@ -71,11 +71,11 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         data = self.stage_load_data(data_dict)
         self.stage_test_saved_networks(data, networks_to_test, plot_probability)
 
-    def execute_analyze_networks(self):
+    def execute_analyze_networks(self, nn_dir):
         """
         Execute analyze networks stage. Analyze all networks saved in app default dir.
         """
-        self.stage_analyze_saved_networks()
+        self.stage_analyze_saved_networks(nn_dir)
 
     def execute_analyze_single_network(self, network_name, layer_num, image_path):
         """

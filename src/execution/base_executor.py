@@ -139,14 +139,14 @@ class BaseExecutor:
             nn_network_obj.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
             timer.stop_timer()
 
-    def stage_analyze_saved_networks(self):
+    def stage_analyze_saved_networks(self, nn_dir):
         """
         Function to load and display analysis all networks created by app.
         """
         timer = src.helpers.timer.Timer()
         timer.set_timer()
-        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Analyze all saved networks")
-        src.data.analyze.analyze_saved_networks(self.PATHS)
+        src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Analyze saved networks")
+        src.data.analyze.analyze_saved_networks(self.PATHS, nn_dir)
         timer.stop_timer()
 
     def stage_analyze_given_network(self, network_name, layer_num, image_path):

@@ -120,23 +120,37 @@ def display_values_distribution_values(data_distribution_values):
             f"\n\t- {percent_of_all}% of {dict_value['data_frame']}"
         )
 
+def _get_network_details(network_path):
+    return pd.read_json(
+        network_path,
+        lines=True
+    )
 
-def analyze_saved_networks(paths):
+def analyze_saved_networks(paths, nn_dir):
     """
     Function to analyze saved networks in base app dir. For each network,
     details .json file is loaded into pandas data frame and displayed. Networks
     are sorted in data frame descending by FTA (First Test Accuracy).
 
     :param paths: dict of app paths
+    :param nn_dir: str name of directory from which network shall be analyzed, if empty,
+        recursively search for saved networks and analyze them all.
     """
     NN_DETAILS_FILE = "network_details.json"
     pandas_json_objects_list = []
-    for network_name in os.listdir(paths["NETWORK_SAVE_DIR"]):
-        pandas_json_object = pd.read_json(
-            os.path.join(paths["NETWORK_SAVE_DIR"], network_name, NN_DETAILS_FILE),
-            lines=True
-        )
-        pandas_json_objects_list.append(pandas_json_object)
+
+    if not nn_dir:
+        # Analyze all networks recursively
+        for root, dirs, files in os.walk(paths["NETWORK_SAVE_DIR"]):
+            for name in files:
+                if name == "saved_model.pb":
+                    pandas_json_objects_list.append(_get_network_details(os.path.join(root, NN_DETAILS_FILE)))
+    else:
+        # Analyze networks in given directory
+        for root, dirs, files in os.walk(os.path.join(paths["NETWORK_SAVE_DIR"], nn_dir)):
+            for name in files:
+                if name == "saved_model.pb":
+                    pandas_json_objects_list.append(_get_network_details(os.path.join(root, NN_DETAILS_FILE)))
 
     IPython.display.display(
         pd.concat(
