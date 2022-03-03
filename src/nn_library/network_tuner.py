@@ -22,6 +22,11 @@ class NetworkTuner:
         self.tuner = None
 
     def initialize_tuner(self, overwrite):
+        """
+        Function to initialize kerastuner.tuners object
+
+        :param overwrite: bool, if checkpoint shall be overwritten
+        """
         self.tuner = RandomSearch(
             self.hyper_model,
             objective='val_accuracy',
@@ -35,6 +40,12 @@ class NetworkTuner:
         self.tuner.search_space_summary()
 
     def hyper_params_search(self, data):
+        """
+        Function to execute hyper-parameters tuning.
+
+        :param data: dict of training, test and validation data
+        :return: float, loss and accuracy of best model
+        """
         self.tuner.search(
             data["X_train"],
             data["y_train"],
@@ -48,6 +59,13 @@ class NetworkTuner:
         return loss, accuracy
 
     def save_best_model(self, directory, loss, accuracy):
+        """
+        Function to save the best model from keras tuner.
+
+        :param directory: str dir path where model will be saved
+        :param loss: float value of loss for best model
+        :param accuracy: float value of accuracy for best model
+        """
         best_model = self.tuner.get_best_models(num_models=1)[0]
         date_time = datetime.datetime.now()
         model_name = f"CNN_HyperModel_{date_time.strftime('%H%M%d%m%y')}"
