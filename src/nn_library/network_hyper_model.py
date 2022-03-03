@@ -52,7 +52,7 @@ class NetworkHyperModel(HyperModel):
                 activation='relu',
             )
         )
-        model.add(layers.SpatialDropout2D(0.2))
+
         model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         # Block 2
@@ -72,7 +72,7 @@ class NetworkHyperModel(HyperModel):
                 activation='relu',
             )
         )
-        model.add(layers.SpatialDropout2D(0.2))
+
         model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         # Block 3
@@ -100,7 +100,7 @@ class NetworkHyperModel(HyperModel):
                 activation='relu',
             )
         )
-        model.add(layers.SpatialDropout2D(0.2))
+
         model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         # Block 4
@@ -120,7 +120,7 @@ class NetworkHyperModel(HyperModel):
                 activation='relu',
             )
         )
-        model.add(layers.SpatialDropout2D(0.2))
+
         model.add(layers.MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 
         # Flatten and dropout layers
@@ -146,8 +146,8 @@ class NetworkHyperModel(HyperModel):
             optimizer=self.optimizer(
                 hp.Float(
                     'learning_rate',
-                    min_value=4e-4,
-                    max_value=1e-2,
+                    min_value=1e-4,
+                    max_value=5e-4,
                     sampling='LOG',
                     default=3e-4
                 )
