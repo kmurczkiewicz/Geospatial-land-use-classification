@@ -34,7 +34,7 @@ extensions = [
     'autoapi.extension'
 ]
 
-autoapi_dirs = ['../src']
+autoapi_dirs = ['../bin', '../src']
 autoapi_options = [
     'members',
     'undoc-members',
