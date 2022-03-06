@@ -14,17 +14,17 @@ import seaborn
 
 import src.helpers.print_extensions
 import src.helpers.timer
-import src.nn_library.topologies
+import src.nn_library.nn_architectures
 
 
 class Neural_network:
     """Class to unify and optimize creation of neural networks using different set of parameters."""
 
     def __init__(self,
-                 nn_topology=src.nn_library.topologies.topology_A,
+                 nn_architecture=src.nn_library.nn_architectures.architecture_A,
                  input_shape=(64, 64, 3)
                  ):
-        self.topology = nn_topology
+        self.architecture = nn_architecture
         self.input_shape = input_shape
         self.num_of_classes = 10
 
@@ -110,12 +110,12 @@ class Neural_network:
 
     def init_network(self, layer_activation_function):
         """
-        Function to initialize network object topology.
+        Function to initialize network object architecture.
 
         :param layer_activation_function: str name of nn layer activation function
         """
         self.layer_activation_function = layer_activation_function
-        self.model = self.topology(
+        self.model = self.architecture(
             self.input_shape,
             self.num_of_classes,
             self.layer_activation_function
@@ -192,7 +192,7 @@ class Neural_network:
             "network_name" : model_name,
             "FTA"          : self.FTA,
             "FTL"          : self.FTL,
-            "topology"     : self.topology.__name__,
+            "architecture" : self.architecture.__name__,
             "optimizer"    : type(self.optimizer).__name__,
             "loss_function": type(self.loss_function).__name__,
             "activation"   : self.layer_activation_function,

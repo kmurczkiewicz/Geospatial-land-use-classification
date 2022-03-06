@@ -5,7 +5,7 @@ import shutil
 import tensorflow as tf
 
 import src.execution.main_executor
-import src.nn_library.network
+import src.nn_library.base_network
 
 EXAMPLE_NETWORK = "./artefacts/example_network_model"
 
@@ -93,7 +93,7 @@ def test_stage_nn_init():
     try:
         executor = src.execution.main_executor.MainExecutor(display=False)
         _ = executor.stage_nn_init(
-            nn_topology=executor.NN_TOPOLOGIES["TEST"],
+            nn_topology=executor.NN_TOPOLOGIES["A"],
             input_shape=(64, 64, 3),
             optimizer=tf.keras.optimizers.Adam(),
             loss_function=tf.keras.losses.SparseCategoricalCrossentropy(),
@@ -109,7 +109,7 @@ def test_stage_nn_train():
     """
     try:
         executor = src.execution.main_executor.MainExecutor(display=False)
-        tmp_network = src.nn_library.network.Neural_network()
+        tmp_network = src.nn_library.base_network.Neural_network()
         tmp_network.model = tf.keras.models.load_model(EXAMPLE_NETWORK)
         executor.stage_nn_train(
             tmp_network,
@@ -128,7 +128,7 @@ def test_stage_nn_test():
     """
     try:
         executor = src.execution.main_executor.MainExecutor(display=False)
-        tmp_network = src.nn_library.network.Neural_network()
+        tmp_network = src.nn_library.base_network.Neural_network()
         tmp_network.model = tf.keras.models.load_model(EXAMPLE_NETWORK)
         executor.stage_nn_test(
             tmp_network,
@@ -149,7 +149,7 @@ def test_stage_nn_save():
     try:
         TEST_MODEL_NAME = 'TEST_MODEL'
         executor = src.execution.main_executor.MainExecutor(display=False)
-        tmp_network = src.nn_library.network.Neural_network()
+        tmp_network = src.nn_library.base_network.Neural_network()
         tmp_network.model = tf.keras.models.load_model(EXAMPLE_NETWORK)
         executor.stage_nn_save(
             executor.PATHS["NETWORK_SAVE_DIR"],

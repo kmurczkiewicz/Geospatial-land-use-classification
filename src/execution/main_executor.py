@@ -24,13 +24,13 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         data_dict = self.stage_prepare_data(read_head=False)
         self.stage_analyze_data(data_dict, self.display)
 
-    def execute_full_flow(self, topology, epochs, optimizer, loss_function, metrics, save_model, batch_size, layer_activation_function, plot_probability=True):
+    def execute_full_flow(self, architecture, epochs, optimizer, loss_function, metrics, save_model, batch_size, layer_activation_function, plot_probability=True):
         """
         Execute all stages. Prepare load train, test and validation data into memory,
-        initialize convolutional neural network with given topology, train and test the network.
+        initialize convolutional neural network with given architecture, train and test the network.
         Save the model locally.
 
-        :param topology: str network topology name
+        :param architecture: str network architecture name
         :param epochs: int number of network training iterations
         :param optimizer: tf optimizer to be used for network compilation
         :param loss_function: tf loss function to be used for network compilation
@@ -43,7 +43,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         data_dict = self.stage_prepare_data(read_head=False)
         data = self.stage_load_data(data_dict)
         cnn_model = self.stage_nn_init(
-            nn_topology=self.NN_TOPOLOGIES[topology],
+            nn_architecture=self.NN_ARCHITECTURES[architecture],
             input_shape=(64, 64, 3),
             optimizer=optimizer,
             loss_function=loss_function,
@@ -56,7 +56,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
             return
         self.stage_nn_save(
             self.PATHS["NETWORK_SAVE_DIR"],
-            self.DEFAULT_NETWORK_NAME + "_" + topology,
+            self.DEFAULT_NETWORK_NAME + "_" + architecture,
             cnn_model
         )
 

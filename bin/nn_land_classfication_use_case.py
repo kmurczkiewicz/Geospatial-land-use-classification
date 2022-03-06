@@ -7,7 +7,7 @@ def main():
     executor = src.execution.main_executor.MainExecutor(display=True)
 
     executor.execute_land_use_classification_use_case(
-        network_name="network_D_2142310122",
+        network_name="03.02.2022_local//network_D_1903240222",
         sat_img_list=[
             "elblag.jpg"
             "france.jpg",

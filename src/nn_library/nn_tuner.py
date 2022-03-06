@@ -75,7 +75,7 @@ class NetworkTuner:
             "network_name" : model_name,
             "FTA"          : accuracy,
             "FTL"          : loss,
-            "topology"     : "hyper_model",
+            "architecture" : "hyper_model",
             "optimizer"    : type(self.hyper_model.optimizer).__name__,
             "loss_function": self.hyper_model.loss_function,
             "created"      : date_time.strftime("%H:%M:%S, %d/%m/%Y"),

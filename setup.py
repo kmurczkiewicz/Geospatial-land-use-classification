@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
    name='geo_sat_nn_app',
-   version='0.1',
+   version='1.0',
    description='Geospatial land use classification tool',
    license="",
    author='Kacper Murczkiewicz',

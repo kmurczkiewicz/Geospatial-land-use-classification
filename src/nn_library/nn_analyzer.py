@@ -25,7 +25,7 @@ class NetworkAnalyzer:
         """
         Function to display kernels (filters) shape in each conv2d layer of given model.e
         """
-        src.helpers.print_extensions.print_subtitle("Model topology")
+        src.helpers.print_extensions.print_subtitle("Model architecture")
         cnn_model = tf.keras.models.load_model(self.network_path)
         cnn_model.summary()
         src.helpers.print_extensions.print_subtitle("Filter shapes")

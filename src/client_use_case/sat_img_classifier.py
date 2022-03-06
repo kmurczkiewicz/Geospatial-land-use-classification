@@ -83,7 +83,7 @@ class SatelliteImageClassifier:
         model is loaded to perform inference on each tile. Depending on inference result, new tile with
         class color representing inference result is saved locally for each source tile.
         """
-        network = src.nn_library.network.Neural_network()
+        network = src.nn_library.base_network.Neural_network()
         network.model = tf.keras.models.load_model(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], self.network_name))
 
         tile_list = os.listdir(self.PATHS["SAT_TILES_PATH"])

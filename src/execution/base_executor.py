@@ -15,11 +15,11 @@ import src.data.analyze
 import src.data.load
 import src.data.prepare
 
-import src.nn_library.network
-import src.nn_library.network_analyzer
-import src.nn_library.network_hyper_model
-import src.nn_library.network_tuner
-import src.nn_library.topologies
+import src.nn_library.base_network
+import src.nn_library.nn_analyzer
+import src.nn_library.nn_hyper_model
+import src.nn_library.nn_tuner
+import src.nn_library.nn_architectures
 
 import src.client_use_case.sat_img_classifier
 
@@ -49,12 +49,11 @@ class BaseExecutor:
         with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
             self.PATHS["LABEL_MAP"] = json.load(json_file)
 
-        self.NN_TOPOLOGIES = {
-            "TEST": src.nn_library.topologies.TEST_TOPOLOGY,
-            "A": src.nn_library.topologies.topology_A,
-            "B": src.nn_library.topologies.topology_B,
-            "C": src.nn_library.topologies.topology_C,
-            "D": src.nn_library.topologies.topology_D
+        self.NN_ARCHITECTURES = {
+            "A": src.nn_library.nn_architectures.architecture_A,
+            "B": src.nn_library.nn_architectures.architecture_B,
+            "C": src.nn_library.nn_architectures.architecture_C,
+            "D": src.nn_library.nn_architectures.architecture_D
         }
 
     def _get_execution_num(self):
@@ -126,18 +125,16 @@ class BaseExecutor:
         if not networks_to_test:
             networks_to_test = os.listdir(self.PATHS["NETWORK_SAVE_DIR"])
 
-        for network_name in filter(
-            lambda x: x in os.listdir(self.PATHS["NETWORK_SAVE_DIR"]),
-            networks_to_test
-        ):
+        for network_name in networks_to_test:
             timer.set_timer()
             src.helpers.print_extensions.print_subtitle(f"Testing: {network_name}")
-            nn_network_obj = src.nn_library.network.Neural_network()
+            nn_network_obj = src.nn_library.base_network.Neural_network()
             nn_network_obj.model = tf.keras.models.load_model(
                 os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name)
             )
             nn_network_obj.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
             timer.stop_timer()
+            print("\n\n")
 
     def stage_analyze_saved_networks(self, nn_dir):
         """
@@ -159,7 +156,7 @@ class BaseExecutor:
         :param image_path: str path to image to analyze kernels and feature map
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Analyze {network_name}")
-        nn_analyzer = src.nn_library.network_analyzer.NetworkAnalyzer(
+        nn_analyzer = src.nn_library.nn_analyzer.NetworkAnalyzer(
             network_path=os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_name),
             layer_num=layer_num,
             img_path=os.path.join(self.PATHS["DATASET"], image_path)
@@ -168,7 +165,7 @@ class BaseExecutor:
 
     def stage_nn_init(
             self,
-            nn_topology,
+            nn_architecture,
             input_shape,
             optimizer,
             loss_function,
@@ -179,7 +176,7 @@ class BaseExecutor:
         Execute neural network initialization stage.
         Create network object and compile the network.
 
-        :param nn_topology: str topology name to be used
+        :param nn_architecture: str architecture name to be used
         :param input_shape: tuple of three integers
         :param optimizer: tf optimizer to be used for network compilation
         :param loss_function: tf loss function to be used for network compilation
@@ -190,18 +187,18 @@ class BaseExecutor:
         timer = src.helpers.timer.Timer()
         timer.set_timer()
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Create and compile the model")
-        cnn_model = src.nn_library.network.Neural_network(nn_topology, input_shape)
+        cnn_model = src.nn_library.base_network.Neural_network(nn_architecture, input_shape)
         cnn_model.init_network(layer_activation_function)
         cnn_model.compile(optimizer, loss_function, metrics)
         timer.stop_timer()
         src.helpers.print_extensions.print_border()
         return cnn_model
 
-    def stage_nn_train(self, cnn_model: src.nn_library.network.Neural_network, data, epochs, batch_size):
+    def stage_nn_train(self, cnn_model: src.nn_library.base_network.Neural_network, data, epochs, batch_size):
         """
         Execute network training stage.
 
-        :param cnn_model: object of type src.nn_library.network.Neural_network
+        :param cnn_model: object of type src.nn_library.base_network.Neural_network
         :param data: dict of test, train and validation data to be used in training
         :param epochs: number of training iterations
         :param batch_size: batch size
@@ -214,11 +211,11 @@ class BaseExecutor:
         cnn_model.plot_model_result("accuracy", 0)
         cnn_model.plot_model_result("loss", 1)
 
-    def stage_nn_test(self, cnn_model: src.nn_library.network.Neural_network, data, plot_probability):
+    def stage_nn_test(self, cnn_model: src.nn_library.base_network.Neural_network, data, plot_probability):
         """
         Execute network testing stage.
 
-        :param cnn_model: object of type src.nn_library.network.Neural_network
+        :param cnn_model: object of type src.nn_library.base_network.Neural_network
         :param data: dict of test, train and validation data to be used in training
         :param plot_probability: bool to define if class probability heatmap should be displayed
         """
@@ -228,13 +225,13 @@ class BaseExecutor:
         cnn_model.test_network(data, self.PATHS["LABEL_MAP"], plot_probability)
         timer.stop_timer()
 
-    def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.network.Neural_network):
+    def stage_nn_save(self, save_dir, network_name, cnn_model: src.nn_library.base_network.Neural_network):
         """
         Execute save network stage. Save network in given dir with given name in .pb format.
 
         :param save_dir: str where network model will be saved in .pb format
         :param network_name: str name of saved network
-        :param cnn_model: object of type src.nn_library.network.Neural_network
+        :param cnn_model: object of type src.nn_library.base_network.Neural_network
         """
         timer = src.helpers.timer.Timer()
         timer.set_timer()
@@ -281,8 +278,8 @@ class BaseExecutor:
         :param save_model: bool, if output nn model shall be saved
         """
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Search for best hyper parameters")
-        hyper_model = src.nn_library.network_hyper_model.NetworkHyperModel()
-        network_tuner = src.nn_library.network_tuner.NetworkTuner(
+        hyper_model = src.nn_library.nn_hyper_model.NetworkHyperModel()
+        network_tuner = src.nn_library.nn_tuner.NetworkTuner(
             max_trials=max_trials,
             executions_per_trial=executions_per_trial,
             n_epoch_search=n_epoch_search,

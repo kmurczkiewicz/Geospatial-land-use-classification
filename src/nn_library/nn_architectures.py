@@ -1,26 +1,9 @@
 from tensorflow.keras import layers, models, activations
 
 
-def TEST_TOPOLOGY(input_shape, num_of_classes):
+def architecture_A(input_shape, num_of_classes, layer_activation_function):
     """
-    Function that initializes MLP (Multilayer perceptron) model using TEST_TOPOLOGY.
-    Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
-
-    :param input_shape: input shape for the model
-    :param num_of_classes: number of output classes for the model
-    :return: MLP model
-    """
-    model = models.Sequential()
-    model.add(layers.Flatten(input_shape=input_shape))
-    model.add(layers.Dense(16, activation='relu'))
-    model.add(layers.Dense(num_of_classes, activation='softmax'))
-
-    return model
-
-
-def topology_A(input_shape, num_of_classes, layer_activation_function):
-    """
-    Function that initializes Shallow MLP (Multilayer perceptron) model using A topology.
+    Function that initializes Shallow MLP (Multilayer perceptron) model using A architecture.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only two hidden dense layers.
 
     :param input_shape: input shape for the model
@@ -37,9 +20,9 @@ def topology_A(input_shape, num_of_classes, layer_activation_function):
     return model
 
 
-def topology_B(input_shape, num_of_classes, layer_activation_function):
+def architecture_B(input_shape, num_of_classes, layer_activation_function):
     """
-    Function that initializes Deep MLP (Multilayer perceptron) model using B topology.
+    Function that initializes Deep MLP (Multilayer perceptron) model using B architecture.
     Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
 
     :param input_shape: input shape for the model
@@ -60,9 +43,9 @@ def topology_B(input_shape, num_of_classes, layer_activation_function):
     return model
 
 
-def topology_C(input_shape, num_of_classes, layer_activation_function):
+def architecture_C(input_shape, num_of_classes, layer_activation_function):
     """
-    Function that initializes Shallow CNN (Convolutional Neural Network) model using C topology.
+    Function that initializes Shallow CNN (Convolutional Neural Network) model using C architecture.
 
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
@@ -87,12 +70,13 @@ def topology_C(input_shape, num_of_classes, layer_activation_function):
     return cnn_model
 
 
-def topology_D(input_shape, num_of_classes, layer_activation_function):
+def architecture_D(input_shape, num_of_classes, layer_activation_function):
     """
-    Function that initializes Deep CNN (Convolutional Neural Network) model using D topology.
+    Function that initializes Deep CNN (Convolutional Neural Network) model using D architecture.
 
     :param input_shape: input shape for the model
     :param num_of_classes: number of output classes for the model
+    :param layer_activation_function: str name of layer activation function to be used
     :return: Deep CNN model
     """
 
