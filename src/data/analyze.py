@@ -67,11 +67,12 @@ def plot(paths, data_distribution, key):
     """
     x = [f"{key} [{paths['LABEL_MAP'][key]}]" for key in data_distribution[key].keys()]
     y = data_distribution[key].values()
-    new_colors = ["red", "yellow", "orange", "green", "cyan", "blue", "purple", "magenta", "lime", "brown"]
+    new_colors = ["#FFAE00", "#1EFF1E", "#79E0A8", "#FF1EF1", "#F50318", "#A2F91D", "#DFD433", "#98A0A2", "#06BDF8", "#0648F8"]
     matplotlib.pyplot.figure(figsize=(10, 4.8))
     matplotlib.pyplot.barh(x, y, color=new_colors)
-    matplotlib.pyplot.xlabel(f'Amount in {key}')
-    matplotlib.pyplot.ylabel('Class')
+    #matplotlib.pyplot.xlabel(f'Ilość w {key}')
+    matplotlib.pyplot.xlabel(f'Ilość w zbiorze walidacyjnym')
+    matplotlib.pyplot.ylabel('Klasa [ID]')
     matplotlib.pyplot.yticks(x)
     # matplotlib.pyplot.xticks(x)
     for index, value in enumerate(y):

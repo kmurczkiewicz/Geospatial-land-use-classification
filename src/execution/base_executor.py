@@ -46,7 +46,7 @@ class BaseExecutor:
             "SAT_MAP_TILES_PATH": os.path.join(self.MAIN_PATH, "artefacts/sat_images/tiles_map"),
         }
 
-        with open(self.PATHS["LABEL_MAP_PATH"]) as json_file:
+        with open(self.PATHS["LABEL_MAP_PATH"], encoding="utf-8") as json_file:
             self.PATHS["LABEL_MAP"] = json.load(json_file)
 
         self.NN_ARCHITECTURES = {
@@ -123,7 +123,25 @@ class BaseExecutor:
         src.helpers.print_extensions.print_title(f"{self._get_execution_num()}. Test networks")
         # If test filter is empty, test all networks
         if not networks_to_test:
-            networks_to_test = os.listdir(self.PATHS["NETWORK_SAVE_DIR"])
+            network_dirs = os.listdir(self.PATHS["NETWORK_SAVE_DIR"])
+
+            for network_dir in network_dirs:
+                for network in os.listdir(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_dir)):
+                    src.helpers.print_extensions.print_subtitle(f"Testing: {network}")
+                    nn_network_obj = src.nn_library.base_network.Neural_network()
+                    nn_network_obj.model = tf.keras.models.load_model(
+                        os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_dir, network)
+                    )
+
+                    with open(os.path.join(self.PATHS["NETWORK_SAVE_DIR"], network_dir, network, "network_details.json")) as file:
+                        json_content = json.load(file)
+                        print(f"Activation: {json_content['activation']}")
+                        print(f"Optimizer: {json_content['optimizer']}")
+                    nn_network_obj.measure(
+                        data
+                    )
+                    print("\n")
+            return
 
         for network_name in networks_to_test:
             timer.set_timer()
@@ -208,8 +226,8 @@ class BaseExecutor:
         timer.set_timer()
         cnn_model.train_cnn_model(data, epochs, self.PATHS["MODEL_CHECKPOINT_PATH"], batch_size)
         timer.stop_timer()
-        cnn_model.plot_model_result("accuracy", 0)
-        cnn_model.plot_model_result("loss", 1)
+        cnn_model.plot_model_result("accuracy", 0, "Dokładność klasyfikacji")
+        cnn_model.plot_model_result("loss", 1, "Wartość funkcji kosztu")
 
     def stage_nn_test(self, cnn_model: src.nn_library.base_network.Neural_network, data, plot_probability):
         """

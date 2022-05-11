@@ -4,9 +4,11 @@ import os
 import numpy as np
 import tensorflow as tf
 import pandas as pd
+import random
+import string
 
 from tensorflow.keras import layers, models
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 from IPython.display import display
 
 import matplotlib.pyplot
@@ -68,7 +70,7 @@ class Neural_network:
             mode='max',
             save_best_only=True
         )
-        early_stopping_callback = tf.keras.callbacks.EarlyStopping('val_loss', patience=5)
+        # early_stopping_callback = tf.keras.callbacks.EarlyStopping('val_loss', patience=5)
         # Train the model
         self.training_history = self.model.fit(
             data["X_train"],
@@ -78,7 +80,7 @@ class Neural_network:
             batch_size=batch_size,
             shuffle=True,
             verbose=1,
-            callbacks=[model_checkpoint_callback, early_stopping_callback]
+            callbacks=[model_checkpoint_callback]#, early_stopping_callback]
         )
         # Load best weights into the model
         self.model.load_weights(checkpoint_filepath)
@@ -143,39 +145,48 @@ class Neural_network:
             annot_kws={"size": 9},
             fmt="g"
         )
-        matplotlib.pyplot.ylabel("Label")
-        matplotlib.pyplot.xlabel("Prediction")
+        # matplotlib.pyplot.ylabel("Label")
+        # matplotlib.pyplot.xlabel("Prediction")
+        matplotlib.pyplot.ylabel("Oczekiwany wynik klasyfikacji")
+        matplotlib.pyplot.xlabel("Wynik klasyfikacji sieci neuronowej")
 
         display(matplotlib.pyplot.figure(num=3))
 
         self.training_history_plots["prediction"] = matplotlib.pyplot.figure(num=3)
         matplotlib.pyplot.close()
 
-    def plot_model_result(self, mode, figure_num):
+    def plot_model_result(self, mode, figure_num, text):
         """
         Function to plot network accuracy and loss function value over training (epochs).
 
         :param mode: str plotting mode, could be 'accuracy' or 'loss'
         :param figure_num: int number defining which plot to use
         """
-        matplotlib.pyplot.figure(figure_num)
-        matplotlib.pyplot.plot(self.training_history.history[mode], label=mode)
-        matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="val_" + mode)
-        matplotlib.pyplot.xlabel('Epoch')
-        matplotlib.pyplot.ylabel(mode)
-        matplotlib.pyplot.ylim(
-            [
-                min(self.training_history.history[mode]),
-                max(self.training_history.history[mode]) + ((max(self.training_history.history[mode])*5)/100)
-            ]
-        )
-        matplotlib.pyplot.legend(loc='best')
-        display(matplotlib.pyplot.figure(num=figure_num))
-        if figure_num == 0:
-            self.training_history_plots["acc"] = matplotlib.pyplot.figure(figure_num)
-        else:
-            self.training_history_plots["loss"] = matplotlib.pyplot.figure(figure_num)
-        matplotlib.pyplot.close()
+        try:
+            matplotlib.pyplot.figure(figure_num)
+            # matplotlib.pyplot.plot(self.training_history.history[mode], label=mode)
+            # matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="val_" + mode)
+            matplotlib.pyplot.plot(self.training_history.history[mode], label="Trening")
+            matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="Walidacja")
+            # matplotlib.pyplot.xlabel('Epoch')
+            # matplotlib.pyplot.ylabel(mode)
+            matplotlib.pyplot.xlabel('Liczba epok')
+            matplotlib.pyplot.ylabel(text)
+            matplotlib.pyplot.ylim(
+                [
+                    min(self.training_history.history[mode]),
+                    max(self.training_history.history[mode]) + ((max(self.training_history.history[mode])*5)/100)
+                ]
+            )
+            matplotlib.pyplot.legend(loc='best')
+            display(matplotlib.pyplot.figure(num=figure_num))
+            if figure_num == 0:
+                self.training_history_plots["acc"] = matplotlib.pyplot.figure(figure_num)
+            else:
+                self.training_history_plots["loss"] = matplotlib.pyplot.figure(figure_num)
+            matplotlib.pyplot.close()
+        except ValueError:
+            print("[ERROR] Could not generate output graph")
 
     def save_model(self, name, directory):
         """
@@ -187,7 +198,12 @@ class Neural_network:
         """
         date_time = datetime.datetime.now()
         model_name = f"{name}_{date_time.strftime('%H%M%d%m%y')}"
+
+        while model_name in os.listdir(directory):
+            model_name = f"{name}_{date_time.strftime('%H%M%d%m%y')}_{random.choice(string.ascii_letters)}"
+
         model_save_dir = os.path.join(directory, model_name)
+
         model_details = {
             "network_name" : model_name,
             "FTA"          : self.FTA,
@@ -198,6 +214,7 @@ class Neural_network:
             "activation"   : self.layer_activation_function,
             "created"      : date_time.strftime("%H:%M:%S, %d/%m/%Y"),
         }
+
         # Save network model
         self.model.save(model_save_dir)
 
@@ -208,9 +225,12 @@ class Neural_network:
         # Save training history plots
         if not self.training_history:
             return
-        self.training_history_plots["acc"].savefig(os.path.join(model_save_dir, "train_acc_history.png"))
-        self.training_history_plots["loss"].savefig(os.path.join(model_save_dir, "train_loss_history.png"))
-        self.training_history_plots["prediction"].savefig(os.path.join(model_save_dir, "prediction_heatmap.png"))
+        try:
+            self.training_history_plots["acc"].savefig(os.path.join(model_save_dir, "train_acc_history.png"))
+            self.training_history_plots["loss"].savefig(os.path.join(model_save_dir, "train_loss_history.png"))
+            self.training_history_plots["prediction"].savefig(os.path.join(model_save_dir, "prediction_heatmap.png"))
+        except KeyError:
+            print("[ERROR] Could not save output graph")
 
     def single_class_prediction(self, input):
         """
@@ -222,3 +242,11 @@ class Neural_network:
         y_predicted = self.model.predict(input)
         class_predicted = np.argmax(y_predicted, axis=1)
         return class_predicted[0]
+
+
+    def measure(self, data):
+        y_true = data["y_test"]
+        y_predicted = np.argmax(self.model.predict(data["X_test"]), axis=1)
+        print(f"Precyzja: {'{:.6f}'.format(precision_score(y_true, y_predicted, average='macro'))}")
+        print(f"Czułość:  {'{:.6f}'.format(recall_score(y_true, y_predicted, average='macro'))}")
+        print(f"F1:  {'{:.6f}'.format(f1_score(y_true, y_predicted, average='macro'))}")

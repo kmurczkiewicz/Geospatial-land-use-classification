@@ -12,7 +12,7 @@ class NetworkHyperModel(HyperModel):
     def __init__(self):
         self.input_shape = (64, 64, 3)
         self.num_classes = 10
-        self.optimizer = keras.optimizers.Adam
+        self.optimizer = keras.optimizers.Adamax
         self.loss_function = "sparse_categorical_crossentropy"
 
     def fit(self, hp, model, *args, **kwargs):
@@ -160,15 +160,7 @@ class NetworkHyperModel(HyperModel):
 
         # Compile the model
         model.compile(
-            optimizer=self.optimizer(
-                hp.Float(
-                    'learning_rate',
-                    min_value=1e-4,
-                    max_value=5e-4,
-                    sampling='LOG',
-                    default=3e-4
-                )
-            ),
+            optimizer=self.optimizer(),
             loss=self.loss_function,
             metrics=['accuracy']
         )

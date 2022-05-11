@@ -24,7 +24,7 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
         data_dict = self.stage_prepare_data(read_head=False)
         self.stage_analyze_data(data_dict, self.display)
 
-    def execute_full_flow(self, architecture, epochs, optimizer, loss_function, metrics, save_model, batch_size, layer_activation_function, plot_probability=True):
+    def execute_full_flow(self, architecture, epochs, loss_function, metrics, save_model, batch_size, optimizers, activations, plot_probability=True):
         """
         Execute all stages. Prepare load train, test and validation data into memory,
         initialize convolutional neural network with given architecture, train and test the network.
@@ -32,33 +32,37 @@ class MainExecutor(src.execution.base_executor.BaseExecutor):
 
         :param architecture: str network architecture name
         :param epochs: int number of network training iterations
-        :param optimizer: tf optimizer to be used for network compilation
         :param loss_function: tf loss function to be used for network compilation
         :param metrics: list of metrics to be measured for network
         :param save_model: bool defining if output model should be saved
         :param plot_probability: bool to define if class probability heatmap should be displayed
         :param batch_size: batch size
-        :param layer_activation_function: str name of nn layer activation function
+        :param optimizers: dict of optimizers and learning rates to be used
+        :param activations: list of layer activation functions
         """
         data_dict = self.stage_prepare_data(read_head=False)
         data = self.stage_load_data(data_dict)
-        cnn_model = self.stage_nn_init(
-            nn_architecture=self.NN_ARCHITECTURES[architecture],
-            input_shape=(64, 64, 3),
-            optimizer=optimizer,
-            loss_function=loss_function,
-            layer_activation_function=layer_activation_function,
-            metrics=metrics
-        )
-        self.stage_nn_train(cnn_model, data, epochs, batch_size)
-        self.stage_nn_test(cnn_model, data, plot_probability)
-        if not save_model:
-            return
-        self.stage_nn_save(
-            self.PATHS["NETWORK_SAVE_DIR"],
-            self.DEFAULT_NETWORK_NAME + "_" + architecture,
-            cnn_model
-        )
+
+        for optimizer in optimizers:
+            for activation in activations:
+                cnn_model = self.stage_nn_init(
+                    nn_architecture=self.NN_ARCHITECTURES[architecture],
+                    input_shape=(64, 64, 3),
+                    # Use learning rate for optimizer if specified, otherwise use default
+                    optimizer=optimizer["optimizer"](learning_rate=optimizer["learning_rate"]) if "learning_rate" in optimizer else optimizer["optimizer"](),
+                    loss_function=loss_function,
+                    layer_activation_function=activation,
+                    metrics=metrics
+                )
+                self.stage_nn_train(cnn_model, data, epochs, batch_size)
+                self.stage_nn_test(cnn_model, data, plot_probability)
+                if not save_model:
+                    return
+                self.stage_nn_save(
+                    self.PATHS["NETWORK_SAVE_DIR"],
+                    self.DEFAULT_NETWORK_NAME + "_" + architecture,
+                    cnn_model
+                )
 
     def execute_test_networks(self, networks_to_test=[], plot_probability=True):
         """

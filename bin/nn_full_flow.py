@@ -3,11 +3,11 @@ import tensorflow as tf
 import src.execution.main_executor
 
 OPTIMIZERS = [
-    tf.keras.optimizers.Adagrad,
+    #tf.keras.optimizers.Adagrad,
     tf.keras.optimizers.Adam,
-    tf.keras.optimizers.Adamax,
-    tf.keras.optimizers.RMSprop,
-    tf.keras.optimizers.SGD
+    #tf.keras.optimizers.Adamax,
+    #tf.keras.optimizers.RMSprop,
+    #tf.keras.optimizers.SGD
 ]
 
 ACTIVATIONS = ['relu', 'tanh', 'selu', 'elu']
@@ -18,7 +18,7 @@ def main():
             executor = src.execution.main_executor.MainExecutor(display=True)
             executor.execute_full_flow(
                 architecture = "D",
-                epochs       = 10,
+                epochs       = 100,
                 optimizer    = optimizer(learning_rate=0.00046748),
                 loss_function= tf.keras.losses.SparseCategoricalCrossentropy(),
                 batch_size   = 128,

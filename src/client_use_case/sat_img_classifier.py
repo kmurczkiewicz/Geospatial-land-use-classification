@@ -21,16 +21,16 @@ class SatelliteImageClassifier:
         self.network_name = network_name
         self.sat_images = sat_images
         self.CLASSES = {
-            "AnnualCrop": {"color" : "#FFAE00", "mapped_amount" : 0},
-            "Forest": {"color" : "#1EFF1E", "mapped_amount" : 0},
-            "HerbaceousVegetation": {"color" : "#79E0A8", "mapped_amount" : 0},
-            "Highway": {"color" : "#FF1EF1", "mapped_amount" : 0},
-            "Industrial": {"color" : "#F50318", "mapped_amount" : 0},
-            "Pasture": {"color" : "#A2F91D", "mapped_amount" : 0},
-            "PermanentCrop": {"color" : "#DFD433", "mapped_amount" : 0},
-            "Residential": {"color" : "#98A0A2", "mapped_amount" : 0},
-            "River": {"color" : "#06BDF8", "mapped_amount" : 0},
-            "SeaLake": {"color" : "#0648F8", "mapped_amount" : 0},
+            "uprawy_jednoroczne": {"color" : "#FFAE00", "mapped_amount" : 0},
+            "las": {"color" : "#1EFF1E", "mapped_amount" : 0},
+            "roślinność_zielna": {"color" : "#79E0A8", "mapped_amount" : 0},
+            "autostrada": {"color" : "#FF1EF1", "mapped_amount" : 0},
+            "obszar_przemysłowy": {"color" : "#F50318", "mapped_amount" : 0},
+            "pastwisko": {"color" : "#A2F91D", "mapped_amount" : 0},
+            "uprawy_trwałe": {"color" : "#DFD433", "mapped_amount" : 0},
+            "obszar_mieszkalny": {"color" : "#98A0A2", "mapped_amount" : 0},
+            "rzeka": {"color" : "#06BDF8", "mapped_amount" : 0},
+            "morze_jezioro": {"color" : "#0648F8", "mapped_amount" : 0},
         }
 
     def _load_sat_image_as_array(self, sat_image):
@@ -58,8 +58,11 @@ class SatelliteImageClassifier:
         :param sat_image: str name of satellite image to be splitted into 64x64 tiles.
         :return: dict containing image dimensions in number of tiles
         """
-        tiles = [sat_image[x:x + 64, y:y + 64] for x in range(0, sat_image.shape[0], 64) for y in
-                 range(0, sat_image.shape[1], 64)]
+        tiles = [
+            sat_image[x:x + 64, y:y + 64]
+            for x in range(0, sat_image.shape[0], 64)
+            for y in range(0, sat_image.shape[1], 64)
+        ]
         width, height = PIL.Image.fromarray(sat_image).size
 
         print(f"Width: {int(width / 64)} tiles of shape 64x64")
@@ -207,14 +210,14 @@ class SatelliteImageClassifier:
         src.helpers.print_extensions.print_subtitle(f"4. Predicted class distribution - {sat_img}")
         x = [key for key, value in self.CLASSES.items() if value["mapped_amount"] > 0]
         y = [value["mapped_amount"] for value in self.CLASSES.values() if value["mapped_amount"] > 0]
-        matplotlib.pyplot.figure(figsize=(16, 7))
+        matplotlib.pyplot.figure(figsize=(20, 7))
         bar_list = matplotlib.pyplot.bar(x, y)
         matplotlib.pyplot.ylim(ymax=max(y)+(max(y)/10), ymin=0)
         for index, class_name in enumerate(x):
             self._set_bar_text_value(bar_list[index], y[index])
             bar_list[index].set_color(self.CLASSES[class_name]["color"])
-        matplotlib.pyplot.xlabel('Class')
-        matplotlib.pyplot.ylabel(f'Amount on {sat_img}')
+        matplotlib.pyplot.xlabel('Klasa')
+        matplotlib.pyplot.ylabel(f'Ilość')
         matplotlib.pyplot.show()
 
     def run_classification(self):
@@ -225,6 +228,7 @@ class SatelliteImageClassifier:
         for sat_img in self.sat_images:
             self._clear_tile_dirs()
             sat_img_array = self._load_sat_image_as_array(sat_img)
+            print(sat_img_array.shape)
             tiles_row_col = self._split_sat_image_to_tiles(sat_img_array)
             self._predict_land_use()
             self._generate_land_use_map(tiles_row_col, sat_img, sat_img_array)
