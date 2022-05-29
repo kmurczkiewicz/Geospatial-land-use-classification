@@ -1,0 +1,22 @@
+:py:mod:`bin.data_analysis`
+===========================
+
+.. py:module:: bin.data_analysis
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bin.data_analysis.main
+
+
+
+.. py:function:: main()
+
+

@@ -1,0 +1,19 @@
+:py:mod:`src`
+=============
+
+.. py:module:: src
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   client_use_case/index.rst
+   data/index.rst
+   execution/index.rst
+   helpers/index.rst
+   nn_library/index.rst
+
+

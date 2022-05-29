@@ -1,0 +1,59 @@
+:py:mod:`src.helpers.print_extensions`
+======================================
+
+.. py:module:: src.helpers.print_extensions
+
+.. autoapi-nested-parse::
+
+   Helper printing functions HTML and CSS, timers etc.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   src.helpers.print_extensions.print_title
+   src.helpers.print_extensions.print_subtitle
+   src.helpers.print_extensions.print_variable
+   src.helpers.print_extensions.print_border
+   src.helpers.print_extensions.print_dict
+
+
+
+.. py:function:: print_title(string)
+
+   Function to display str as title in jupyter notebook.
+   :param string: str title to be displayed
+
+
+.. py:function:: print_subtitle(string)
+
+   Function to display str as subtitle in jupyter notebook.
+   :param string: str subtitle to be displayed
+
+
+.. py:function:: print_variable(string)
+
+   Function to display str as variable in jupyter notebook.
+   :param string: str variable name to be displayed
+
+
+.. py:function:: print_border()
+
+   Function to display border in jupyter notebook.
+
+
+.. py:function:: print_dict(dict_to_print, spaces='')
+
+   Function to display dictionary in jupyter notebook.
+
+   :param dict_to_print: dict object to be displayed
+   :param spaces: space amount to be used for dict displaying
+
+

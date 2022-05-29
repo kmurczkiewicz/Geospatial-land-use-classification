@@ -2,6 +2,8 @@ import src.execution.main_executor
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+import pandas
+pandas.set_option('display.max_rows', None)
 
 def main():
     executor = src.execution.main_executor.MainExecutor(display=True)

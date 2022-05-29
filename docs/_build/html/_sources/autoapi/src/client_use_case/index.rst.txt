@@ -1,0 +1,15 @@
+:py:mod:`src.client_use_case`
+=============================
+
+.. py:module:: src.client_use_case
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   sat_img_classifier/index.rst
+
+

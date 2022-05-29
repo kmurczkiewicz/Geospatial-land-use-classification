@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.data.analyze &mdash; geo_sat_nn_app 0.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> geo_sat_nn_app
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">geo_sat_nn_app</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">src.data.analyze</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/src/data/analyze/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-src.data.analyze">
+<span id="src-data-analyze"></span><h1><a class="reference internal" href="#module-src.data.analyze" title="src.data.analyze"><code class="xref py py-mod docutils literal notranslate"><span class="pre">src.data.analyze</span></code></a><a class="headerlink" href="#module-src.data.analyze" title="Permalink to this headline"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.data.analyze.analyze_data" title="src.data.analyze.analyze_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_data</span></code></a>(paths, data_dict, display)</p></td>
+<td><p>Function to analyze data distribution in each of train, test and val dataframe.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.data.analyze.plot" title="src.data.analyze.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(paths, data_distribution, key)</p></td>
+<td><p>Function to plot data distribution in dictionary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.data.analyze.display_example" title="src.data.analyze.display_example"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_example</span></code></a>(paths, data_dict, key)</p></td>
+<td><p>Function to display 5x5 grid with images and their labels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.data.analyze.display_values_distribution_values" title="src.data.analyze.display_values_distribution_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_values_distribution_values</span></code></a>(data_distribution_values)</p></td>
+<td><p>Function to display quantitative distribution of classes</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#src.data.analyze._get_network_details" title="src.data.analyze._get_network_details"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_network_details</span></code></a>(network_path)</p></td>
+<td><p>Function to read network .json descriptor into pandas dataframe object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#src.data.analyze.analyze_saved_networks" title="src.data.analyze.analyze_saved_networks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_saved_networks</span></code></a>(paths, nn_dir)</p></td>
+<td><p>Function to analyze saved networks in base app dir. For each network,</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze.analyze_data">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">analyze_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze.analyze_data" title="Permalink to this definition"></a></dt>
+<dd><p>Function to analyze data distribution in each of train, test and val dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> – dict of app paths</p></li>
+<li><p><strong>data_dict</strong> – dict of train, test, validation pandas data frames</p></li>
+<li><p><strong>display</strong> – bool type, display output (images, plots etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze.plot">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Function to plot data distribution in dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> – dict of app paths</p></li>
+<li><p><strong>data_distribution</strong> – dict of data distribution in test, train and val data frames</p></li>
+<li><p><strong>key</strong> – str key to data_distribution</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze.display_example">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">display_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze.display_example" title="Permalink to this definition"></a></dt>
+<dd><p>Function to display 5x5 grid with images and their labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> – dict of app paths</p></li>
+<li><p><strong>data_dict</strong> – dict of train, test, validation pandas data frames</p></li>
+<li><p><strong>key</strong> – str key to data_dict</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze.display_values_distribution_values">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">display_values_distribution_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_distribution_values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze.display_values_distribution_values" title="Permalink to this definition"></a></dt>
+<dd><p>Function to display quantitative distribution of classes
+in test, train and validation data frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data_distribution_values</strong> – dict containing distribution details of test, train and validation data frames.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze._get_network_details">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">_get_network_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze._get_network_details" title="Permalink to this definition"></a></dt>
+<dd><p>Function to read network .json descriptor into pandas dataframe object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_path</strong> – str path to network</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pandas dataframe object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.data.analyze.analyze_saved_networks">
+<span class="sig-prename descclassname"><span class="pre">src.data.analyze.</span></span><span class="sig-name descname"><span class="pre">analyze_saved_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn_dir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.data.analyze.analyze_saved_networks" title="Permalink to this definition"></a></dt>
+<dd><p>Function to analyze saved networks in base app dir. For each network,
+details .json file is loaded into pandas data frame and displayed. Networks
+are sorted in data frame descending by FTA (First Test Accuracy).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>paths</strong> – dict of app paths</p></li>
+<li><p><strong>nn_dir</strong> – str name of directory from which network shall be analyzed, if empty,
+recursively search for saved networks and analyze them all.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Kacper Murczkiewicz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

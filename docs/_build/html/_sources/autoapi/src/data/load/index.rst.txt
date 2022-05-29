@@ -1,0 +1,28 @@
+:py:mod:`src.data.load`
+=======================
+
+.. py:module:: src.data.load
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   src.data.load.load_into_memory
+
+
+
+.. py:function:: load_into_memory(paths, data_dict)
+
+   Function to load train, test and validation data into memory
+
+   :param paths: dict of app paths
+   :param data_dict: dict of train, test, validation pandas data frames
+   :return dict of images in type array and labels in test, train and validation form
+
+

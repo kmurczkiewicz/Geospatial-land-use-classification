@@ -1,0 +1,22 @@
+:py:mod:`bin.nn_land_classfication_use_case`
+============================================
+
+.. py:module:: bin.nn_land_classfication_use_case
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bin.nn_land_classfication_use_case.main
+
+
+
+.. py:function:: main()
+
+

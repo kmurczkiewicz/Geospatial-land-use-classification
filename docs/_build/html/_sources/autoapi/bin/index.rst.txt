@@ -1,0 +1,20 @@
+:py:mod:`bin`
+=============
+
+.. py:module:: bin
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   data_analysis/index.rst
+   nn_analysis/index.rst
+   nn_full_flow/index.rst
+   nn_hyper_parameters_tuning/index.rst
+   nn_land_classfication_use_case/index.rst
+   nn_testing/index.rst
+
+

@@ -1,0 +1,17 @@
+:py:mod:`src.data`
+==================
+
+.. py:module:: src.data
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   analyze/index.rst
+   load/index.rst
+   prepare/index.rst
+
+

@@ -1,0 +1,22 @@
+:py:mod:`bin.nn_testing`
+========================
+
+.. py:module:: bin.nn_testing
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bin.nn_testing.main
+
+
+
+.. py:function:: main()
+
+

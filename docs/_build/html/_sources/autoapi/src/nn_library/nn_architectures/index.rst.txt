@@ -1,0 +1,64 @@
+:py:mod:`src.nn_library.nn_architectures`
+=========================================
+
+.. py:module:: src.nn_library.nn_architectures
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   src.nn_library.nn_architectures.architecture_A
+   src.nn_library.nn_architectures.architecture_B
+   src.nn_library.nn_architectures.architecture_C
+   src.nn_library.nn_architectures.architecture_D
+
+
+
+.. py:function:: architecture_A(input_shape, num_of_classes, layer_activation_function)
+
+   Function that initializes Shallow MLP (Multilayer perceptron) model using A architecture.
+   Multidimensional input (image in numpy array type) is converted to one dimension. Only two hidden dense layers.
+
+   :param input_shape: input shape for the model
+   :param num_of_classes: number of output classes for the model
+   :param layer_activation_function: str name of nn layer activation function
+   :return: Shallow MLP model
+
+
+.. py:function:: architecture_B(input_shape, num_of_classes, layer_activation_function)
+
+   Function that initializes Deep MLP (Multilayer perceptron) model using B architecture.
+   Multidimensional input (image in numpy array type) is converted to one dimension. Only hidden dense layers.
+
+   :param input_shape: input shape for the model
+   :param num_of_classes: number of output classes for the model
+   :param layer_activation_function: str name of nn layer activation function
+   :return: Deep MLP model
+
+
+.. py:function:: architecture_C(input_shape, num_of_classes, layer_activation_function)
+
+   Function that initializes Shallow CNN (Convolutional Neural Network) model using C architecture.
+
+   :param input_shape: input shape for the model
+   :param num_of_classes: number of output classes for the model
+   :param layer_activation_function: str name of nn layer activation function
+   :return: Shallow CNN model
+
+
+.. py:function:: architecture_D(input_shape, num_of_classes, layer_activation_function)
+
+   Function that initializes Deep CNN (Convolutional Neural Network) model using D architecture.
+
+   :param input_shape: input shape for the model
+   :param num_of_classes: number of output classes for the model
+   :param layer_activation_function: str name of layer activation function to be used
+   :return: Deep CNN model
+
+

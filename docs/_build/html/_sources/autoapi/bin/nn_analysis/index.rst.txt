@@ -1,0 +1,22 @@
+:py:mod:`bin.nn_analysis`
+=========================
+
+.. py:module:: bin.nn_analysis
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   bin.nn_analysis.main
+
+
+
+.. py:function:: main()
+
+
