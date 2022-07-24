@@ -23,14 +23,14 @@
 ## Geospatial land use classification
 
 ### 1. Raw satellite image
-![download](https://user-images.githubusercontent.com/71273151/155847463-854f11f4-490f-4081-9358-3293f93d4560.png)
+![elblag](https://user-images.githubusercontent.com/71273151/180648900-4fc98760-70ba-45ac-9fbd-7b99d18651dd.png)
 
-### 2. Land use mask generated with neural network
-![download](https://user-images.githubusercontent.com/71273151/155847539-77c16ce2-4fe8-4728-8b63-fe3ebe810ba7.png)
+### 2. Land use mask generated using CNN
+![mask](https://user-images.githubusercontent.com/71273151/180648915-7c69834c-4319-4837-b07c-c533c124d300.png)
 
 ### 3. Satellite image with land use mask applied
-![download](https://user-images.githubusercontent.com/71273151/155847552-cbfac528-6848-4ea0-8bdc-2cddad2b41bb.png)
+![mask_applied](https://user-images.githubusercontent.com/71273151/180648919-de392b9d-1097-45c5-b478-6ab47c05c6fa.png)
+
 
 ### 4. Land use distribution
-![download](https://user-images.githubusercontent.com/71273151/155847575-3f572ae1-b49b-4a2f-b1fd-123d9157c8fc.png)
-
+![diagram](https://user-images.githubusercontent.com/71273151/180648924-b010817c-38a3-4111-bf6e-8a0e652207ff.png)
