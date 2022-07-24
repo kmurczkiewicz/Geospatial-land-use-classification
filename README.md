@@ -1,6 +1,6 @@
 # Geospatial-land-use-classification
 
-- **Documentation**: https://kmurczkiewicz.github.io/Docs-Geospatial-land-use-classification/ \
+- **Documentation**: https://kmurczkiewicz.github.io/Docs-Geospatial-land-use-classification/ 
 - **Dataset**: https://www.kaggle.com/apollo2506/eurosat-dataset 
 
 
@@ -15,7 +15,7 @@
 - Dataset analysis, data preparation and management
 - Executor based approach to keep code reusability at highest level
 - MLP/CNN designing for classification tasks, training and testing on given dataset
-- Hyper parameters tuning and optimization
+- Hyper-parameters tuning and optimization
 - Land use map generation with given network model on given satellite image
 - Network storing, testing and analysis
 
