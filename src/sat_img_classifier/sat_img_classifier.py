@@ -216,8 +216,8 @@ class SatelliteImageClassifier:
         for index, class_name in enumerate(x):
             self._set_bar_text_value(bar_list[index], y[index])
             bar_list[index].set_color(self.CLASSES[class_name]["color"])
-        matplotlib.pyplot.xlabel('Klasa')
-        matplotlib.pyplot.ylabel(f'Ilość')
+        matplotlib.pyplot.xlabel('Class label')
+        matplotlib.pyplot.ylabel(f'Amount')
         matplotlib.pyplot.show()
 
     def run_classification(self):

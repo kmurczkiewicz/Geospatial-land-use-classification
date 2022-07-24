@@ -21,7 +21,7 @@ import src.nn_library.nn_hyper_model
 import src.nn_library.nn_tuner
 import src.nn_library.nn_architectures
 
-import src.client_use_case.sat_img_classifier
+import src.sat_img_classifier.sat_img_classifier
 
 
 class BaseExecutor:
@@ -267,7 +267,7 @@ class BaseExecutor:
         """
         timer = src.helpers.timer.Timer()
         timer.set_timer()
-        sat_img_classifier = src.client_use_case.sat_img_classifier.SatelliteImageClassifier(
+        sat_img_classifier = src.sat_img_classifier.sat_img_classifier.SatelliteImageClassifier(
             self.PATHS,
             network_name,
             sat_img_list
