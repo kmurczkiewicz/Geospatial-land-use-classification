@@ -70,7 +70,7 @@ class Neural_network:
             mode='max',
             save_best_only=True
         )
-        # early_stopping_callback = tf.keras.callbacks.EarlyStopping('val_loss', patience=5)
+        early_stopping_callback = tf.keras.callbacks.EarlyStopping('val_loss', patience=5)
         # Train the model
         self.training_history = self.model.fit(
             data["X_train"],
@@ -80,7 +80,7 @@ class Neural_network:
             batch_size=batch_size,
             shuffle=True,
             verbose=1,
-            callbacks=[model_checkpoint_callback]#, early_stopping_callback]
+            callbacks=[model_checkpoint_callback, early_stopping_callback]
         )
         # Load best weights into the model
         self.model.load_weights(checkpoint_filepath)
@@ -145,17 +145,15 @@ class Neural_network:
             annot_kws={"size": 9},
             fmt="g"
         )
-        # matplotlib.pyplot.ylabel("Label")
-        # matplotlib.pyplot.xlabel("Prediction")
-        matplotlib.pyplot.ylabel("Oczekiwany wynik klasyfikacji")
-        matplotlib.pyplot.xlabel("Wynik klasyfikacji sieci neuronowej")
+        matplotlib.pyplot.ylabel("Label")
+        matplotlib.pyplot.xlabel("Prediction")
 
         display(matplotlib.pyplot.figure(num=3))
 
         self.training_history_plots["prediction"] = matplotlib.pyplot.figure(num=3)
         matplotlib.pyplot.close()
 
-    def plot_model_result(self, mode, figure_num, text):
+    def plot_model_result(self, mode, figure_num):
         """
         Function to plot network accuracy and loss function value over training (epochs).
 
@@ -164,14 +162,10 @@ class Neural_network:
         """
         try:
             matplotlib.pyplot.figure(figure_num)
-            # matplotlib.pyplot.plot(self.training_history.history[mode], label=mode)
-            # matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="val_" + mode)
-            matplotlib.pyplot.plot(self.training_history.history[mode], label="Trening")
-            matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="Walidacja")
-            # matplotlib.pyplot.xlabel('Epoch')
-            # matplotlib.pyplot.ylabel(mode)
-            matplotlib.pyplot.xlabel('Liczba epok')
-            matplotlib.pyplot.ylabel(text)
+            matplotlib.pyplot.plot(self.training_history.history[mode], label=mode)
+            matplotlib.pyplot.plot(self.training_history.history["val_" + mode], label="val_" + mode)
+            matplotlib.pyplot.xlabel('Epoch')
+            matplotlib.pyplot.ylabel(mode)
             matplotlib.pyplot.ylim(
                 [
                     min(self.training_history.history[mode]),
@@ -247,6 +241,6 @@ class Neural_network:
     def measure(self, data):
         y_true = data["y_test"]
         y_predicted = np.argmax(self.model.predict(data["X_test"]), axis=1)
-        print(f"Precyzja: {'{:.6f}'.format(precision_score(y_true, y_predicted, average='macro'))}")
-        print(f"Czułość:  {'{:.6f}'.format(recall_score(y_true, y_predicted, average='macro'))}")
+        print(f"Precision: {'{:.6f}'.format(precision_score(y_true, y_predicted, average='macro'))}")
+        print(f"Recall:  {'{:.6f}'.format(recall_score(y_true, y_predicted, average='macro'))}")
         print(f"F1:  {'{:.6f}'.format(f1_score(y_true, y_predicted, average='macro'))}")

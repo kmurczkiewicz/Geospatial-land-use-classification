@@ -226,8 +226,8 @@ class BaseExecutor:
         timer.set_timer()
         cnn_model.train_cnn_model(data, epochs, self.PATHS["MODEL_CHECKPOINT_PATH"], batch_size)
         timer.stop_timer()
-        cnn_model.plot_model_result("accuracy", 0, "Dokładność klasyfikacji")
-        cnn_model.plot_model_result("loss", 1, "Wartość funkcji kosztu")
+        cnn_model.plot_model_result("accuracy", 0)
+        cnn_model.plot_model_result("loss", 1)
 
     def stage_nn_test(self, cnn_model: src.nn_library.base_network.Neural_network, data, plot_probability):
         """

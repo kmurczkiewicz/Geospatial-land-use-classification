@@ -21,16 +21,16 @@ class SatelliteImageClassifier:
         self.network_name = network_name
         self.sat_images = sat_images
         self.CLASSES = {
-            "uprawy_jednoroczne": {"color" : "#FFAE00", "mapped_amount" : 0},
-            "las": {"color" : "#1EFF1E", "mapped_amount" : 0},
-            "roślinność_zielna": {"color" : "#79E0A8", "mapped_amount" : 0},
-            "autostrada": {"color" : "#FF1EF1", "mapped_amount" : 0},
-            "obszar_przemysłowy": {"color" : "#F50318", "mapped_amount" : 0},
-            "pastwisko": {"color" : "#A2F91D", "mapped_amount" : 0},
-            "uprawy_trwałe": {"color" : "#DFD433", "mapped_amount" : 0},
-            "obszar_mieszkalny": {"color" : "#98A0A2", "mapped_amount" : 0},
-            "rzeka": {"color" : "#06BDF8", "mapped_amount" : 0},
-            "morze_jezioro": {"color" : "#0648F8", "mapped_amount" : 0},
+            "AnnualCrop": {"color" : "#FFAE00", "mapped_amount" : 0},
+            "Forest": {"color" : "#1EFF1E", "mapped_amount" : 0},
+            "HerbaceousVegetation": {"color" : "#79E0A8", "mapped_amount" : 0},
+            "Highway": {"color" : "#FF1EF1", "mapped_amount" : 0},
+            "Industrial": {"color" : "#F50318", "mapped_amount" : 0},
+            "Pasture": {"color" : "#A2F91D", "mapped_amount" : 0},
+            "PermanentCrop": {"color" : "#DFD433", "mapped_amount" : 0},
+            "Residential": {"color" : "#98A0A2", "mapped_amount" : 0},
+            "River": {"color" : "#06BDF8", "mapped_amount" : 0},
+            "SeaLake": {"color" : "#0648F8", "mapped_amount" : 0},
         }
 
     def _load_sat_image_as_array(self, sat_image):
