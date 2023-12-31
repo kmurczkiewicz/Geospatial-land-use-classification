@@ -95,4 +95,4 @@ For instance: **["new_york.jpg"]**
 
 
 ### 4. Land use distribution
-![diagram](https://user-images.githubusercontent.com/71273151/180648924-b010817c-38a3-4111-bf6e-8a0e652207ff.png)
+![image](https://github.com/kmurczkiewicz/Geospatial-land-use-classification/assets/71273151/9f28fd2b-d2d6-4048-8c0a-f61742b5ae78)
